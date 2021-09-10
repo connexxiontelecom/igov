@@ -4,18 +4,18 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class Chat extends Model
+class ContractorLicense extends Model
 {
 	protected $DBGroup              = 'default';
-	protected $table                = 'chats';
-	protected $primaryKey           = 'chat_id';
+	protected $table                = 'contractor_licenses';
+	protected $primaryKey           = 'contractor_license_id';
 	protected $useAutoIncrement     = true;
 	protected $insertID             = 0;
 	protected $returnType           = 'array';
 	protected $useSoftDeletes       = false;
 	protected $protectFields        = true;
-	protected $allowedFields        = ['chat_id', 'chat_from_id','chat_to_id','chat_message','chat_attachment','chat_is_read'];
-
+	protected $allowedFields        = ['contractor_license_id', 'contractor_id','contractor_license_category_id','contractor_license_start_date',
+        'contractor_license_end_date','license_amount'];
 
 	// Dates
 	protected $useTimestamps        = false;
@@ -41,25 +41,10 @@ class Chat extends Model
 	protected $beforeDelete         = [];
 	protected $afterDelete          = [];
 
-
-	public function getMessagesWithUserByUserId($from_user_id, $to_user_id){
-        $builder = $this->db->table('chats as c');
-        $builder->where('c.chat_to_id = '.$to_user_id);
-        $builder->orWhere('c.chat_from_id = '.$from_user_id);
+    public function getContractorLicenseByContractorId($id){
+        $builder = $this->db->table('contractor_licenses as cl');
+        $builder->join('contractor_license_categories as clc','cl.contractor_license_category_id = clc.contractor_license_category_id' );
+        $builder->where('cl.contractor_id = '.$id);
         return $builder->get()->getResultObject();
-    }
-    public function fetchChatMessages($sender, $receiver){
-        $builder = $this->db->table('chats as c');
-        $builder->where('chat_from_id = '.$sender);
-        $builder->orWhere( 'chat_from_id = '.$receiver);
-        $builder->where('chat_to_id = '.$receiver);
-        $builder->orWhere(' chat_to_id = '.$sender);
-        $builder->orderBy('chat_id', 'ASC');
-        return $builder->get()->getResultArray();
-    }
-    public function getMessages(){
-	    return Chat::findAll();
-        /*$builder = $this->db->table('chats as c');
-        return $builder->get()->getResult();*/
     }
 }

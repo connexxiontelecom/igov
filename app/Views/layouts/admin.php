@@ -711,11 +711,28 @@
                                 <li>
                                     <a href="<?= route_to('manage-projects') ?>">Manage Projects</a>
                                 </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="#procurementMenu" data-toggle="collapse">
+                            <i data-feather="briefcase"></i>
 
+                            <span> Procurement </span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <div class="collapse" id="procurementMenu">
+                            <ul class="nav-second-level">
                                 <li>
-                                    <a href="<?=route_to('manage-contractors'); ?>">Contractors</a>
+                                    <a href="<?= route_to('manage-contractors') ?>">Contractors</a>
                                 </li>
 
+                               <!-- <li>
+                                    <a href="route_to('contractor-license-renewal'); ?>">Renewal License</a>
+                                </li>-->
+                                <li>
+                                    <a href="<?=route_to('contractor-license-category'); ?>">License Category</a>
+                                </li>
 
                             </ul>
                         </div>

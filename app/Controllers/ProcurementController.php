@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
+use App\Models\ContractorLicenseCategory;
 use App\Models\Employee;
 use App\Models\Product;
 use App\Models\UserModel;
@@ -20,6 +21,7 @@ class ProcurementController extends BaseController
         $this->employee = new Employee();
         $this->vendor = new Vendor();
         $this->product = new Product();
+        $this->contractorlicensecategory = new ContractorLicenseCategory();
 
     }
     public function manageVendors()
@@ -98,6 +100,7 @@ class ProcurementController extends BaseController
         }
     }
 
+
     public function manageProducts()
     {
         $data = [
@@ -145,6 +148,73 @@ class ProcurementController extends BaseController
             $this->product->save($data);
             return redirect()->back()->with("success", "<strong>Success!</strong> New product added");
         }
+    }
+
+    public function contractorLicenseCategory()
+    {
+        $data = [
+            'firstTime'=>$this->session->firstTime,
+            'username'=>$this->session->username,
+            'categories'=>$this->contractorlicensecategory->getAllContractorLicenseCategory()
+        ];
+        return view('pages/procurement/license-category',$data);
+    }
+
+    public function storeContractorLicenseCategory(){
+        $inputs = $this->validate([
+            'category_name' => ['rules'=> 'required', 'label'=>'Product Name','errors' => [
+                'required' => 'Enter category name']],
+            'amount' => ['rules'=> 'required', 'errors'=>['required'=>'Enter amount']],
+            'max_contracts' => ['rules'=> 'required', 'errors'=>['required'=>'Enter maximum number of contracts']],
+        ]);
+        if (!$inputs) {
+            return view('pages/procurement/license-category', [
+                'validation' => $this->validator,
+                'firstTime'=>$this->session->firstTime,
+                'username'=>$this->session->username,
+                'categories'=>$this->contractorlicensecategory->getAllContractorLicenseCategory()
+            ]);
+        }else{
+            $data = [
+                'category_name'=>$this->request->getPost('category_name'),
+                'max_contracts'=>$this->request->getPost('max_contracts'),
+                'category_amount'=>$this->request->getPost('amount')
+            ];
+
+            $this->contractorlicensecategory->save($data);
+            return redirect()->back()->with("success", "<strong>Success!</strong> New contractor license category registered");
+        }
+    }
+public function updateContractorLicenseCategory(){
+        $inputs = $this->validate([
+            'category_name' => ['rules'=> 'required', 'label'=>'Product Name','errors' => [
+                'required' => 'Enter category name']],
+            'amount' => ['rules'=> 'required', 'errors'=>['required'=>'Enter amount']],
+            'max_contracts' => ['rules'=> 'required', 'errors'=>['required'=>'Enter maximum number of contracts']],
+            'cat'=>['rules'=>'required']
+        ]);
+        if (!$inputs) {
+            return view('pages/procurement/license-category', [
+                'validation' => $this->validator,
+                'firstTime'=>$this->session->firstTime,
+                'username'=>$this->session->username,
+                'categories'=>$this->contractorlicensecategory->getAllContractorLicenseCategory()
+            ]);
+        }else{
+            $data = [
+                'category_name'=>$this->request->getPost('category_name'),
+                'max_contracts'=>$this->request->getPost('max_contracts'),
+                'category_amount'=>$this->request->getPost('amount')
+            ];
+
+            $this->contractorlicensecategory->update($this->request->getPost('cat'), $data);
+            return redirect()->back()->with("success", "<strong>Success!</strong> Your changes were saved.");
+        }
+    }
+
+
+    public function contractorLicenseRenewal(){
+
     }
 
 }

@@ -4,6 +4,8 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Models\Contractor;
+use App\Models\ContractorLicense;
+use App\Models\ContractorLicenseCategory;
 use App\Models\Employee;
 use App\Models\UserModel;
 
@@ -18,6 +20,8 @@ class ContractorController extends BaseController
         $this->user = new UserModel();
         $this->employee = new Employee();
         $this->contractor = new Contractor();
+        $this->contractorlicensecategory = new ContractorLicenseCategory();
+        $this->contractorlicense = new ContractorLicense();
 
     }
 	public function manageContractors()
@@ -63,6 +67,76 @@ class ContractorController extends BaseController
 
             $this->contractor->save($data);
             return redirect()->back()->with("success", "<strong>Success!</strong> New contractor added");
+        }
+    }
+
+    public function contractorDetail($id){
+        $contractor = $this->contractor->getContractorById($id);
+        if(!empty($contractor)){
+            $data = [
+              'contractor'=>$contractor,
+              'firstTime'=>$this->session->firstTime,
+              'username'=>$this->session->username,
+              'categories'=>$this->contractorlicensecategory->getAllContractorLicenseCategory(),
+              'licenses'=>$this->contractorlicense->getContractorLicenseByContractorId($id)
+            ];
+            return view('pages/procurement/contractor-detail', $data);
+        }else{
+            return redirect()->back()->with("error", "<strong>Whoops!</strong> No record found.");
+        }
+    }
+
+    public function renewLicense(){
+        $inputs = $this->validate([
+            'license_category' => ['rules'=> 'required', 'label'=>'Category','errors' => [
+                'required' => 'Select category']],
+            'start_date' => ['rules'=> 'required', 'errors'=>['required'=>'Enter start date']],
+            'end_date' => ['rules'=> 'required', 'errors'=>['required'=>'Enter end date']],
+            'amount' => ['rules'=>'required', 'errors'=>['Enter amount']]
+        ]);
+        if (!$inputs) {
+            return redirect()->back()->with("error", "Something went wrong.");
+            /*return view('pages/project/add-new-contractor', [
+                'validation' => $this->validator,
+                'firstTime'=>$this->session->firstTime,
+                'username'=>$this->session->username,
+            ]);*/
+        }else{
+            $data = [
+                'contractor_id'=>$this->request->getPost('contractorId'),
+                //'contractor_email'=>$this->request->getPost('description'),
+                'license_amount'=>$this->request->getPost('amount'),
+                'contractor_license_end_date'=>$this->request->getPost('end_date'),
+                'contractor_license_start_date'=>$this->request->getPost('start_date'),
+                'contractor_license_category_id'=>$this->request->getPost('license_category')
+            ];
+
+            $this->contractorlicense->save($data);
+            return redirect()->back()->with("success", "<strong>Success!</strong> New contractor license renewed.");
+        }
+    }
+    public function updateContractorStatus(){
+        $inputs = $this->validate([
+            'reason' => ['rules'=> 'required', 'label'=>'Reason','errors' => [
+                'required' => 'State your reason']],
+            'contractorId' => ['rules'=> 'required', 'errors'=>['required'=>'Enter start date']],
+            'status' => ['rules'=> 'required', 'errors'=>['required'=>'Select status']],
+        ]);
+        if (!$inputs) {
+            return redirect()->back()->with("error", "Something went wrong.");
+            /*return view('pages/project/add-new-contractor', [
+                'validation' => $this->validator,
+                'firstTime'=>$this->session->firstTime,
+                'username'=>$this->session->username,
+            ]);*/
+        }else{
+            $data = [
+                'contractor_status'=>$this->request->getPost('status'),
+                'contractor_black_list_comment'=>$this->request->getPost('reason'),
+            ];
+
+            $this->contractor->update($this->request->getPost('contractorId'),$data);
+            return redirect()->back()->with("success", "<strong>Success!</strong> Your changes were updated.");
         }
     }
 }

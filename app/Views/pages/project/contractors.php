@@ -60,7 +60,7 @@
                                     <div class="btn-group dropdown">
                                         <a href="javascript: void(0);" class="table-action-btn dropdown-toggle arrow-none btn btn-light btn-sm" data-toggle="dropdown" aria-expanded="false"><i class="mdi mdi-dots-horizontal"></i></a>
                                         <div class="dropdown-menu dropdown-menu-right">
-                                            <a class="dropdown-item" href="javascript:void(0);"><i class="mdi mdi-check-all mr-2 text-muted font-18 vertical-middle"></i>View Contractor</a>
+                                            <a class="dropdown-item" href="<?= route_to('contractor-detail', $contractor['contractor_id']) ?>"><i class="mdi mdi-check-all mr-2 text-muted font-18 vertical-middle"></i>View Contractor</a>
                                         </div>
                                     </div>
                                 </td>

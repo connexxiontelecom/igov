@@ -9,25 +9,24 @@
                     <div class="simplebar-content" style="padding: 0px 15px;">
                         <?php if(count($messages) > 0): ?>
                             <?php foreach ($messages as $message): ?>
-                            <?php if($message['chat_from_id'] == $auth_employee['employee_id'] && $message['chat_to_id'] == $selected_employee['employee_id']): ?>
-                            <li class="clearfix odd">
-                                <div class="chat-avatar">
-                                    <img src="/assets/images/users/user-5.jpg" class="rounded" alt="James Z">
-                                    <i>10:00</i>
-                                </div>
-                                <div class="conversation-text">
-                                    <div class="ctext-wrap">
-                                        <i><?= $auth_employee['employee_f_name'] ?? '' ?> <?= $auth_employee['employee_l_name'] ?? '' ?></i>
-                                        <p><?php $message['chat_message'] ?? '' ?></p>
-                                    </div>
-                                </div>
-                            </li>
-                            <?php endif; ?>
-                                <?php if($message['chat_to_id'] == $selected_employee['employee_id'] && $message['chat_from_id'] == $auth_employee['employee_id']): ?>
+                            <?php if($message['chat_from_id'] == $auth_employee['employee_id']): ?>
+                                    <li class="clearfix odd">
+                                        <div class="chat-avatar">
+                                            <img src="/assets/images/users/user-5.jpg" class="rounded" alt="James Z">
+                                        </div>
+                                        <div class="conversation-text">
+                                            <div class="ctext-wrap">
+                                                <i><?= $auth_employee['employee_f_name'] ?? '' ?> <?= $auth_employee['employee_l_name'] ?? '' ?></i>
+                                                <p><?php $message['chat_message'] ?? '' ?> </p>
+                                                <p><?= date('F j, Y g:i a', strtotime($message['created_at'])) ?></p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                <?php endif; ?>
+                                <?php if($message['chat_to_id'] == $selected_employee['employee_id'] ): ?>
                                     <li class="clearfix">
                                         <div class="chat-avatar">
                                             <img src="/assets/images/users/user-5.jpg" class="rounded" alt="James Z">
-
                                         </div>
                                         <div class="conversation-text">
                                             <div class="ctext-wrap">

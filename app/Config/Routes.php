@@ -181,6 +181,7 @@ $routes->post('/email-settings', 'EmailController::processEmailSettings', ['filt
 $routes->get('/chat', 'ChatController::chat', ['filter'=>'auth']);
 $routes->post('/chat-messages', 'ChatController::getMessages', ['filter'=>'auth']);
 $routes->post('/send-message', 'ChatController::sendMessage', ['filter'=>'auth']);
+$routes->get('/test-chat', 'ChatController::getMessages', ['filter'=>'auth']);
 
 #Project routes
 $routes->get('/manage-projects','ProjectController::index',['filter'=>'auth', 'as'=>'manage-projects']);
@@ -201,7 +202,8 @@ $routes->post('/reminder/insert', 'ReminderController::insert', ['filter'=>'auth
 $routes->get('/manage-contractors', 'ContractorController::manageContractors',['filter'=>'auth', 'as'=>'manage-contractors']);
 $routes->get('/add-new-contractor', 'ContractorController::showNewContractorForm',['filter'=>'auth', 'as'=>'add-new-contractor']);
 $routes->post('/add-new-contractor', 'ContractorController::addNewContractor',['filter'=>'auth']);
-
+$routes->get('/contractor-details/(:num)', 'ContractorController::contractorDetail/$1',['filter'=>'auth', 'as'=>'contractor-detail']);
+$routes->post('/renew-license', 'ContractorController::renewLicense',['filter'=>'auth', 'as'=>'renew-license']);
 
 #Vendor routes
 $routes->get('/manage-vendors', 'ProcurementController::manageVendors',['filter'=>'auth', 'as'=>'manage-vendors']);
@@ -212,6 +214,11 @@ $routes->post('/update-vendor', 'ProcurementController::updateVendor',['filter'=
 $routes->get('/manage-products', 'ProcurementController::manageProducts',['filter'=>'auth', 'as'=>'manage-products']);
 $routes->get('/add-new-product', 'ProcurementController::showNewProductForm',['filter'=>'auth', 'as'=>'add-new-product']);
 $routes->post('/add-new-product', 'ProcurementController::addNewProduct',['filter'=>'auth']);
+
+$routes->get('/contractor-license-category', 'ProcurementController::contractorLicenseCategory',['filter'=>'auth','as'=>'contractor-license-category']);
+$routes->post('/contractor-license-category', 'ProcurementController::storeContractorLicenseCategory',['filter'=>'auth','as'=>'contractor-license-category']);
+$routes->post('/update-contractor-license-category', 'ProcurementController::updateContractorLicenseCategory',['filter'=>'auth','as'=>'update-contractor-license-category']);
+$routes->get('/contractor-license-renewal', 'ProcurementController::contractorLicenseRenewal',['filter'=>'auth','as'=>'contractor-license-renewal']);
 
 // employee routes
 $routes->match(['get'], 'my-account', 'EmployeeController::my_account', ['filter' => 'auth']);
