@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1a67d5f1c7559a346629a9ec4d6ccf0e",
+    "content-hash": "ec677eb2c8b333ada4c922d6c7460fc6",
     "packages": [
         {
             "name": "ably/ably-php",
@@ -60,16 +60,16 @@
         },
         {
             "name": "codeigniter4/framework",
-            "version": "v4.1.3",
+            "version": "v4.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeigniter4/framework.git",
-                "reference": "3416a0b4ca5c824f639beaf43f9e5b7e87511c5c"
+                "reference": "b0868b9aa9c52ce5bd51033d18e6c72f8e4ffa91"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeigniter4/framework/zipball/3416a0b4ca5c824f639beaf43f9e5b7e87511c5c",
-                "reference": "3416a0b4ca5c824f639beaf43f9e5b7e87511c5c",
+                "url": "https://api.github.com/repos/codeigniter4/framework/zipball/b0868b9aa9c52ce5bd51033d18e6c72f8e4ffa91",
+                "reference": "b0868b9aa9c52ce5bd51033d18e6c72f8e4ffa91",
                 "shasum": ""
             },
             "require": {
@@ -4424,9 +4424,8 @@
     "prefer-lowest": false,
     "platform": {
         "php": "^7.3||^8.0",
-        "ext-json": "*",
-        "ext-curl": "*"
+        "ext-json": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "2.1.0"
 }

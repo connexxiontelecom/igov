@@ -225,6 +225,8 @@ $routes->match(['get'], 'my-account', 'EmployeeController::my_account', ['filter
 $routes->match(['get'], 'check-signature-exists', 'EmployeeController::check_signature_exists', ['filter' => 'auth']);
 $routes->match(['post'], 'setup-signature', 'EmployeeController::setup_signature', ['filter' => 'auth']);
 $routes->match(['post'], 'verify-signature', 'EmployeeController::verify_signature', ['filter' => 'auth']);
+$routes->match(['post'], 'submit-token', 'EmployeeController::submit_token', ['filter' => 'auth']);
+$routes->match(['post'], 'confirm-token', 'EmployeeController::confirm_token', ['filter' => 'auth']);
 
 // central registry routes
 $routes->match(['get'], 'central-registry', 'CentralRegistryController::index', ['filter' => 'auth']);
@@ -273,7 +275,13 @@ $routes->match(['get'], 'active-vehicles', 'FleetController::active_vehicles', [
 $routes->match(['get', 'post'], 'new-vehicle', 'FleetController::new_vehicle', ['filter' => 'auth']);
 $routes->match(['get'], 'drivers', 'FleetController::drivers', ['filter' => 'auth']);
 $routes->match(['get', 'post'], 'new-driver', 'FleetController::new_driver', ['filter' => 'auth']);
-
+$routes->match(['get', 'post'], 'manage-vehicle/(:num)', 'FleetController::manage_vehicle/$1', ['filter' => 'auth']);
+$routes->match(['get', 'post'], 'renewal-schedules', 'FleetController::renewal_schedules', ['filter' => 'auth']);
+$routes->match(['get', 'post'], 'renewal-schedule-calendar', 'FleetController::renewal_schedule_calendar', ['filter' => 'auth']);
+$routes->match(['get', 'post'], 'renewal-schedule-data', 'FleetController::renewal_schedule_data', ['filter' => 'auth']);
+$routes->match(['get', 'post'], 'maintenance-schedules', 'FleetController::maintenance_schedules', ['filter' => 'auth']);
+$routes->match(['get', 'post'], 'maintenance-schedule-calendar', 'FleetController::maintenance_schedule_calendar', ['filter' => 'auth']);
+$routes->match(['get', 'post'], 'maintenance-schedule-data', 'FleetController::maintenance_schedule_data', ['filter' => 'auth']);
 
 /*
  * --------------------------------------------------------------------
