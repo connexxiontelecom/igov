@@ -83,6 +83,7 @@
                         </div>
                         <div class="col-lg-6">
                             <div class="card-box">
+                                <h5 class="text-uppercase mt-0 mb-3 bg-light p-2">Documents</h5>
                                 <h5 class="text-uppercase mt-0 mb-3 bg-light p-2">Renewal Log</h5>
                                 <div class="mt-5" style="height: 300px; overflow: auto">
                                     <ul class="list-unstyled p-2">
@@ -147,21 +148,15 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Start Date</label>
-                                <input type="date" name="start_date" placeholder="Start Date" class="form-control">
+                                <label for="">Year</label>
+                                <input type="text" name="start_date" placeholder="Year" class="form-control">
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">End Date</label>
-                                <input type="date" name="end_date" placeholder="End Date" class="form-control">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="">Amount</label>
+                                <label for="">Subscription</label>
                                 <input type="number" name="amount" step="0.01" placeholder="Amount" class="form-control">
                             </div>
                         </div>

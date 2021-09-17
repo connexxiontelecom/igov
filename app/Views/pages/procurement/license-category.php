@@ -42,7 +42,7 @@
                         </th>
                         <th>Category Name</th>
                         <th>Max. # of Contracts</th>
-                        <th>Amount</th>
+                        <th>Subscription</th>
                         <th class="hidden-sm">Action</th>
                     </tr>
                     </thead>

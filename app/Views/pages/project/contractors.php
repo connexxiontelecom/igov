@@ -43,6 +43,7 @@
                             <th>Email</th>
                             <th>Mobile No.</th>
                             <th>Website</th>
+                            <th>Status</th>
                             <th class="text-center" style="width: 10%">Actions</th>
                         </tr>
 
@@ -56,6 +57,7 @@
                                 <td><?= $contractor['contractor_email'] ?></td>
                                 <td><?= $contractor['contractor_mobile_no'] ?></td>
                                 <td><?= $contractor['contractor_website'] ?></td>
+                                <td><?= $contractor['contractor_status'] == 1 ? 'Active' : 'Blacklisted' ?></td>
                                 <td>
                                     <div class="btn-group dropdown">
                                         <a href="javascript: void(0);" class="table-action-btn dropdown-toggle arrow-none btn btn-light btn-sm" data-toggle="dropdown" aria-expanded="false"><i class="mdi mdi-dots-horizontal"></i></a>

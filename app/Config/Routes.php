@@ -205,6 +205,12 @@ $routes->post('/add-new-contractor', 'ContractorController::addNewContractor',['
 $routes->get('/contractor-details/(:num)', 'ContractorController::contractorDetail/$1',['filter'=>'auth', 'as'=>'contractor-detail']);
 $routes->post('/renew-license', 'ContractorController::renewLicense',['filter'=>'auth', 'as'=>'renew-license']);
 
+#Contract routes
+$routes->get('/contract-category', 'ContractController::showContractCategories',['filter'=>'auth','as'=>'contract-categories']);
+$routes->post('/contract-category', 'ContractController::showContractCategories',['filter'=>'auth']);
+$routes->get('/new-contract', 'ContractController::showContractForm',['filter'=>'auth','as'=>'add-new-contract']);
+$routes->post('/new-contract', 'ContractController::setNewContract',['filter'=>'auth']);
+
 #Vendor routes
 $routes->get('/manage-vendors', 'ProcurementController::manageVendors',['filter'=>'auth', 'as'=>'manage-vendors']);
 $routes->get('/add-new-vendor', 'ProcurementController::showNewVendorForm',['filter'=>'auth', 'as'=>'add-new-vendor']);

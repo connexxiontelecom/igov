@@ -115,6 +115,14 @@
                             </div>
                         </div>
                         <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="">Attachment</label>
+                                    <input type="file" name="attachment" class="form-control-file">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
                             <div class="col-md-12 d-flex justify-content-center">
                                 <div class="btn-group ">
                                     <a href="" class="btn btn-secondary btn-sm">Cancel</a>

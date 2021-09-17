@@ -226,7 +226,6 @@
           <li>
             <a href="#procurementMenu" data-toggle="collapse">
               <i data-feather="grid"></i>
-
               <span> Procurement </span>
               <span class="menu-arrow"></span>
             </a>
