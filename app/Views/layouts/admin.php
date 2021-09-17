@@ -733,6 +733,9 @@
                                     <a href="<?= route_to('add-new-contract'); ?>">Add New Contract</a>
                                 </li>
                                 <li>
+                                    <a href="<?= route_to('all-contracts'); ?>">All Contracts</a>
+                                </li>
+                                <li>
                                     <a href="<?=route_to('contractor-license-category'); ?>">License Category</a>
                                 </li>
 

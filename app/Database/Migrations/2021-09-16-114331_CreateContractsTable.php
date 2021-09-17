@@ -52,7 +52,7 @@ class CreateContractsTable extends Migration
                 'contract_status' =>[
                     'type' => 'INT',
                     'null'=>true,
-                    'default'=>1,
+                    'default'=>0,
                     'comment'=>'1=open,0=unpublished,2=closed'
                 ],
                 'contract_slug' =>[

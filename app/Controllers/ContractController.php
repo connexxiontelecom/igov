@@ -77,7 +77,7 @@ class ContractController extends BaseController
         $inputs = $this->validate([
             'title' => ['rules'=> 'required', 'label'=>'Title','errors' => [
                 'required' => 'Enter title']],
-            'member' => ['rules'=> 'required', 'label'=>'Member','errors' => [
+            'tender_board' => ['rules'=> 'required', 'label'=>'Member','errors' => [
                 'required' => 'Select board members']],
             'opening_date' => ['rules'=> 'required', 'label'=>'Opening date','errors' => [
                 'required' => 'Enter opening date']],
@@ -87,8 +87,10 @@ class ContractController extends BaseController
                 'required' => 'What is the scope of work to be done?']],
             'eligibility' => ['rules'=> 'required', 'label'=>'Eligibility','errors' => [
                 'required' => 'Enter eligibility']],
-            'certificate' => ['rules'=> 'required', 'label'=>'Certificate','errors' => [
-                'required' => 'Upload certificate of No Objection.']]
+            /*'certificate' => ['rules'=> 'required', 'label'=>'Certificate','errors' => [
+                'required' => 'Upload certificate of No Objection.']],
+        'tender_documents' => ['rules'=> 'required', 'label'=>'Tender document','errors' => [
+            'required' => 'Upload tender documents']]*/
         ]);
         if (!$inputs) {
             return view('pages/procurement/add-new-contract', [
@@ -105,7 +107,7 @@ class ContractController extends BaseController
                 'contract_certificate'=>$this->request->getPost('certificate'),
                 'contract_opening_date'=>$this->request->getPost('opening_date'),
                 'contract_closing_date'=>$this->request->getPost('closing_date'),
-                'contract_slug'=>$this->request->getPost('title')
+                'contract_slug'=>substr(sha1(time()),23,40)
             ];
 
             $contract_id = $this->contract->insert($data);
@@ -117,8 +119,15 @@ class ContractController extends BaseController
                 }*/
             #Contract attachments
 
-            return redirect()->back()->with("success", "<strong>Success!</strong> New contractor added");
+            return redirect()->back()->with("success", "<strong>Success!</strong> New contract added. Though it is yet to be published.");
         }
+    }
+
+    public function allContracts(){
+        return view('pages/procurement/all-contracts', [
+            'firstTime'=>$this->session->firstTime,
+            'username'=>$this->session->username,
+        ]);
     }
 
     private function _get_department_employees() {

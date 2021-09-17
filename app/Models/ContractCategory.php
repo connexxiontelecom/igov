@@ -8,7 +8,7 @@ class ContractCategory extends Model
 {
 	protected $DBGroup              = 'default';
 	protected $table                = 'contract_categories';
-	protected $primaryKey           = 'id';
+	protected $primaryKey           = 'contract_category_id';
 	protected $useAutoIncrement     = true;
 	protected $insertID             = 0;
 	protected $returnType           = 'array';

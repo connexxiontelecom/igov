@@ -17,8 +17,21 @@
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col-md-12">
+            <?php if(session()->has('success')): ?>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <?= session()->get('success') ?>
+                </div>
+            <?php endif; ?>
+        </div>
+    </div>
     <!-- end page title -->
     <?php $validation =  \Config\Services::validation(); ?>
+
     <form action="<?= route_to('add-new-contract') ?>" method="post" enctype="multipart/form-data">
         <?= csrf_field() ?>
         <div class="row" style="margin-top: -50px">
@@ -42,9 +55,9 @@
                                 <option value="<?= $employee['employee_id'] ?>"><?= $employee['employee_f_name'] ?> <?= $employee['employee_l_name'] ?></option>
                             <?php endforeach; ?>
                         </select>
-                        <?php if ($validation->getError('title')): ?>
+                        <?php if ($validation->getError('tender_board')): ?>
                             <div class="text-danger">
-                                <?= $validation->getError('title') ?>
+                                <?= $validation->getError('tender_board') ?>
                             </div>
                         <?php endif; ?>
                     </div>

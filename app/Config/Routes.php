@@ -210,6 +210,7 @@ $routes->get('/contract-category', 'ContractController::showContractCategories',
 $routes->post('/contract-category', 'ContractController::showContractCategories',['filter'=>'auth']);
 $routes->get('/new-contract', 'ContractController::showContractForm',['filter'=>'auth','as'=>'add-new-contract']);
 $routes->post('/new-contract', 'ContractController::setNewContract',['filter'=>'auth']);
+$routes->get('/new-contract', 'ContractController::allContracts',['filter'=>'auth','as'=>'all-contracts']);
 
 #Vendor routes
 $routes->get('/manage-vendors', 'ProcurementController::manageVendors',['filter'=>'auth', 'as'=>'manage-vendors']);
