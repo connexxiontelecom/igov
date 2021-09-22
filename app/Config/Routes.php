@@ -213,7 +213,11 @@ $routes->get('/contract-category', 'ContractController::showContractCategories',
 $routes->post('/contract-category', 'ContractController::showContractCategories',['filter'=>'auth']);
 $routes->get('/new-contract', 'ContractController::showContractForm',['filter'=>'auth','as'=>'add-new-contract']);
 $routes->post('/new-contract', 'ContractController::setNewContract',['filter'=>'auth']);
-$routes->get('/new-contract', 'ContractController::allContracts',['filter'=>'auth','as'=>'all-contracts']);
+$routes->get('/all-contracts', 'ContractController::allContracts',['filter'=>'auth','as'=>'all-contracts']);
+$routes->get('/view-contract/(:any)', 'ContractController::viewContract/$1',['filter'=>'auth','as'=>'view-contract']);
+$routes->get('/edit-contract/(:any)', 'ContractController::editContract/$1',['filter'=>'auth','as'=>'edit-contract']);
+$routes->post('/publish-contract', 'ContractController::publishContract',['filter'=>'auth','as'=>'publish-contract']);
+$routes->post('/contract/leave-comment', 'ContractController::setNewConversation',['filter'=>'auth','as'=>'leave-comment-contract']);
 
 #Vendor routes
 $routes->get('/manage-vendors', 'ProcurementController::manageVendors',['filter'=>'auth', 'as'=>'manage-vendors']);
@@ -293,6 +297,13 @@ $routes->match(['get', 'post'], 'maintenance-schedules', 'FleetController::maint
 $routes->match(['get', 'post'], 'maintenance-schedule-calendar', 'FleetController::maintenance_schedule_calendar', ['filter' => 'auth']);
 $routes->match(['get', 'post'], 'maintenance-schedule-data', 'FleetController::maintenance_schedule_data', ['filter' => 'auth']);
 
+
+$routes->match(['get', 'post'], 'contractor-login', 'ContractorAuth::login', ['filter'=>'noauth', 'as'=>'contractor-login']);
+$routes->get('/contractor-dashboard', 'ContractorPortalController::dashboard',[ 'as'=>'contractor-dashboard', 'filter'=>'contractorauth']);
+$routes->get('/contract-listing', 'ContractorPortalController::contractListing',[ 'as'=>'contract-listing', 'filter'=>'contractorauth']);
+$routes->get('/contract-details/(:any)', 'ContractorPortalController::viewContractDetails/$1',[ 'as'=>'contract-details', 'filter'=>'contractorauth']);
+$routes->get('/bidding/(:any)', 'ContractorPortalController::showContractBiddingView/$1',[ 'as'=>'contract-bidding', 'filter'=>'contractorauth']);
+$routes->post('/submit-bid', 'ContractorPortalController::submitBid',[ 'as'=>'submit-bid', 'filter'=>'contractorauth']);
 
 /*
  * --------------------------------------------------------------------

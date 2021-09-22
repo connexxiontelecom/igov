@@ -14,7 +14,9 @@ class ContractConversation extends Model
 	protected $returnType           = 'array';
 	protected $useSoftDeletes       = false;
 	protected $protectFields        = true;
-	protected $allowedFields        = [];
+	protected $allowedFields        = ['contract_convo_id','contract_convo_contract_id','contract_convo_employee_id','contract_convo'];
+
+
 
 	// Dates
 	protected $useTimestamps        = false;
@@ -39,4 +41,17 @@ class ContractConversation extends Model
 	protected $afterFind            = [];
 	protected $beforeDelete         = [];
 	protected $afterDelete          = [];
+
+   public function getContractConversationByContractId($id){
+        $builder = $this->db->table('contract_conversations as cc');
+        $builder->join('employees as e','e.employee_id = cc.contract_convo_employee_id' );
+        $builder->where('cc.contract_convo_contract_id = '.$id);
+        return $builder->get()->getResultObject();
+    }
+   /* public function getContractConversationByContractId($id){
+        $builder = $this->db->table('contract_boards as cb');
+        $builder->join('employees as e','e.employee_id = cb.contract_b_employee_id' );
+        $builder->where('cb.contract_b_contract_id = '.$id);
+        return $builder->get()->getResultObject();
+    }*/
 }

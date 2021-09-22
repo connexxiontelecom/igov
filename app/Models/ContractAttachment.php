@@ -39,4 +39,10 @@ class ContractAttachment extends Model
 	protected $afterFind            = [];
 	protected $beforeDelete         = [];
 	protected $afterDelete          = [];
+
+    public function getAllContractAttachmentsByContractId($contract_id){
+        $builder = $this->db->table('contract_attachments');
+        $builder->where('contract_att_contract_id = '.$contract_id);
+        return $builder->get()->getResultObject();
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace Config;
 
+use App\Filters\ContractorAuth;
 use CodeIgniter\Config\BaseConfig;
 use CodeIgniter\Filters\CSRF;
 use CodeIgniter\Filters\DebugToolbar;
@@ -23,6 +24,7 @@ class Filters extends BaseConfig
 		'honeypot' => Honeypot::class,
 		"auth" => Auth::class,
 		"noauth" => Noauth::class,
+        "contractorauth"=>ContractorAuth::class,
 	];
 
 	/**

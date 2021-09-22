@@ -67,10 +67,7 @@
                 </div>
             <?php endif; ?>
             <div class="card-box">
-                <button type="button" data-target="#addLicenseCategoryModal" data-toggle="modal" class="btn btn-sm btn-blue waves-effect waves-light float-right">
-                    <i class="mdi mdi-plus-circle"></i> Add New Contract Category
-                </button>
-                <h4 class="header-title mb-4">Contractor License Categories</h4>
+                <h4 class="header-title mb-4">Contract Categories</h4>
 
                 <table class="table table-hover m-0 table-centered dt-responsive nowrap w-100" id="tickets-table">
                     <thead>
@@ -79,8 +76,7 @@
                             S/No.
                         </th>
                         <th>Category Name</th>
-                        <th>Max. # of Contracts</th>
-                        <th>Subscription</th>
+                        <th>Description</th>
                         <th class="hidden-sm">Action</th>
                     </tr>
                     </thead>

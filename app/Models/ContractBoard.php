@@ -39,4 +39,12 @@ class ContractBoard extends Model
 	protected $afterFind            = [];
 	protected $beforeDelete         = [];
 	protected $afterDelete          = [];
+
+
+    public function getContractBoardMembersByContractId($id){
+        $builder = $this->db->table('contract_boards as cb');
+        $builder->join('employees as e','e.employee_id = cb.contract_b_employee_id' );
+        $builder->where('cb.contract_b_contract_id = '.$id);
+        return $builder->get()->getResultObject();
+    }
 }

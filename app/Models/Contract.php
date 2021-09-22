@@ -43,4 +43,20 @@ class Contract extends Model
 	protected $afterFind            = [];
 	protected $beforeDelete         = [];
 	protected $afterDelete          = [];
+
+
+	public function getAllContracts(){
+	    return Contract::orderBy('contract_id', 'DESC')->findAll();
+    }
+
+    public function getContractBySlug($slug){
+	    return Contract::where('contract_slug', $slug)->first();
+    }
+
+    public function getContractById($id){
+       /* $builder = $this->db->table('contracts as c');
+        $builder->where('c.contract_id = '.$id);
+        return $builder->get()->getFirstRow();*/
+        return Contract::where('contract_id', $id)->first();
+    }
 }
