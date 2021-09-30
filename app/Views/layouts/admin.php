@@ -736,6 +736,9 @@
                                     <a href="<?= route_to('all-contracts'); ?>">All Contracts</a>
                                 </li>
                                 <li>
+                                    <a href="<?= route_to('manage-bids'); ?>">Bids</a>
+                                </li>
+                                <li>
                                     <a href="<?=route_to('contractor-license-category'); ?>">License Category</a>
                                 </li>
 

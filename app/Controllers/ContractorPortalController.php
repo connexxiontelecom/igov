@@ -45,6 +45,15 @@ class ContractorPortalController extends BaseController
         return view('pages/procurement/auth/contract-listing',$data);
     }
 
+    public function myBids(){
+        $contractor_id = $this->session->contractor_id;
+         $bids = $this->contractbidding->getContractorBidsByContractorById($contractor_id);
+        $data = [
+            'my_bids'=>$bids,
+        ];
+        return view('pages/procurement/auth/my-bids',$data);
+    }
+
     public function viewContractDetails($slug){
         $contract = $this->contract->getContractBySlug($slug);
         if(!empty($contract)){

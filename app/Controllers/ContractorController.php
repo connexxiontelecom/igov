@@ -3,6 +3,8 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
+use App\Models\ContractBidding;
+use App\Models\ContractBiddingDocument;
 use App\Models\Contractor;
 use App\Models\ContractorLicense;
 use App\Models\ContractorLicenseCategory;
@@ -22,6 +24,8 @@ class ContractorController extends BaseController
         $this->contractor = new Contractor();
         $this->contractorlicensecategory = new ContractorLicenseCategory();
         $this->contractorlicense = new ContractorLicense();
+        $this->contractbidding = new ContractBidding();
+        $this->contractbiddingdocument = new ContractBiddingDocument();
 
     }
 	public function manageContractors()
@@ -138,5 +142,65 @@ class ContractorController extends BaseController
             $this->contractor->update($this->request->getPost('contractorId'),$data);
             return redirect()->back()->with("success", "<strong>Success!</strong> Your changes were updated.");
         }
+    }
+
+
+    public function manageBids(){
+        $data = [
+            'bids'=>$this->contractbidding->getAllContractorBids(),
+            'firstTime'=>$this->session->firstTime,
+            'username'=>$this->session->username
+        ];
+        return view('pages/procurement/manage-bids', $data);
+    }
+
+    public function viewBid($id){
+        $bid = $this->contractbidding->getContractorBidByBidId($id);
+
+        if(!empty($bid)){
+            $documents = $this->contractbiddingdocument->getContractBidDocumentByContractBidId($id);
+            $data = [
+                'bid'=>$bid,
+                'firstTime'=>$this->session->firstTime,
+                'username'=>$this->session->username,
+                'documents'=>$documents
+            ];
+            return view('pages/procurement/view-bid', $data);
+        }else{
+            return redirect()->back()->with("error", "<strong>Whoops!</strong> No record found.");
+        }
+
+    }
+
+    public function updateBidStatus(){
+        if ($this->request->getMethod() == 'post') {
+            $validation = $this->validate([
+                'contract_bid_id' => 'required',
+                'status' => 'required'
+            ], [
+                'status' => ['required' => 'Select status']
+            ]);
+            if (!$validation) {
+                $data = [
+                    'validation' => $this->validator
+                ];
+                return redirect()->back()->with("error", "<strong>Whoops!</strong> Something went wrong.");
+            }else{
+                $bid = $this->contractbidding->getBidById($this->request->getVar('contract_bid_id'));
+                if(!empty($bid)){
+                    $bid_data = [
+                      'contract_bd_status'=>$this->request->getVar('status'),
+                      'contract_bd_updated_by'=>$this->session->employee_id,
+                      'contract_bd_date_updated'=>date('Y-m-d'),
+                    ];
+                    $this->contractbidding->update($this->request->getVar('contract_bid_id'), $bid_data);
+                    #Convert contract to project
+                    //$contract = $this->contractbidding->getBidById($this->request->getVar('contract_bid_id'));
+                }else{
+                    return redirect()->back()->with("error", "<strong>Whoops!</strong> No record found.");
+                }
+            }
+        }
+
     }
 }

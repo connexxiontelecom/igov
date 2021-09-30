@@ -71,4 +71,24 @@ class ContractBidding extends Model
     public function getDeclinedBidsByContractorId($id){
         return ContractBidding::where('contract_bd_contractor_id', $id)->where('contract_bd_status',2)->findAll();
     }
+
+    public function getAllContractorBids(){
+        $builder = $this->db->table('contract_biddings as cb');
+        $builder->join('contractors as con','cb.contract_bd_contractor_id = con.contractor_id' );
+        $builder->join('contracts as contr','contr.contract_id = cb.contract_bd_contract_id' );
+        $builder->orderBy('cb.contract_bidding_id', 'DESC');
+        return $builder->get()->getResultArray();
+    }
+
+    public function getContractorBidByBidId($id){
+        $builder = $this->db->table('contract_biddings as cb');
+        $builder->join('contractors as con','cb.contract_bd_contractor_id = con.contractor_id' );
+        $builder->join('contracts as contr','contr.contract_id = cb.contract_bd_contract_id' );
+        $builder->where('cb.contract_bidding_id = '.$id);
+        return $builder->get()->getRowArray();
+    }
+
+    public function getBidById($id){
+        return ContractBidding::where('contract_bidding_id', $id)->first();
+    }
 }

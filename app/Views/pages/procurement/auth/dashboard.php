@@ -81,7 +81,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="float-right ml-2">
-                    <a href="#">View all</a>
+                    <a href="<?= route_to('my-bids') ?>">View all</a>
                 </div>
                 <h5 class="header-title mb-4">Latest Transaction</h5>
 

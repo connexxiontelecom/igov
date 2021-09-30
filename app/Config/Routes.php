@@ -207,6 +207,9 @@ $routes->get('/add-new-contractor', 'ContractorController::showNewContractorForm
 $routes->post('/add-new-contractor', 'ContractorController::addNewContractor',['filter'=>'auth']);
 $routes->get('/contractor-details/(:num)', 'ContractorController::contractorDetail/$1',['filter'=>'auth', 'as'=>'contractor-detail']);
 $routes->post('/renew-license', 'ContractorController::renewLicense',['filter'=>'auth', 'as'=>'renew-license']);
+$routes->get('/manage-bids', 'ContractorController::manageBids',['filter'=>'auth','as'=>'manage-bids']);
+$routes->get('/view-bid/(:num)', 'ContractorController::viewBid/$1',['filter'=>'auth','as'=>'view-bid']);
+$routes->post('/update-bid-status', 'ContractorController::updateBidStatus', ['filter'=>'auth', 'as'=>'update-bid-status']);
 
 #Contract routes
 $routes->get('/contract-category', 'ContractController::showContractCategories',['filter'=>'auth','as'=>'contract-categories']);
@@ -304,6 +307,7 @@ $routes->get('/contract-listing', 'ContractorPortalController::contractListing',
 $routes->get('/contract-details/(:any)', 'ContractorPortalController::viewContractDetails/$1',[ 'as'=>'contract-details', 'filter'=>'contractorauth']);
 $routes->get('/bidding/(:any)', 'ContractorPortalController::showContractBiddingView/$1',[ 'as'=>'contract-bidding', 'filter'=>'contractorauth']);
 $routes->post('/submit-bid', 'ContractorPortalController::submitBid',[ 'as'=>'submit-bid', 'filter'=>'contractorauth']);
+$routes->get('/my-bids', 'ContractorPortalController::myBids',[ 'as'=>'my-bids', 'filter'=>'contractorauth']);
 
 /*
  * --------------------------------------------------------------------
