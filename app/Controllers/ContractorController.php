@@ -3,12 +3,14 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
+use App\Models\Contract;
 use App\Models\ContractBidding;
 use App\Models\ContractBiddingDocument;
 use App\Models\Contractor;
 use App\Models\ContractorLicense;
 use App\Models\ContractorLicenseCategory;
 use App\Models\Employee;
+use App\Models\Project;
 use App\Models\UserModel;
 
 class ContractorController extends BaseController
@@ -26,6 +28,8 @@ class ContractorController extends BaseController
         $this->contractorlicense = new ContractorLicense();
         $this->contractbidding = new ContractBidding();
         $this->contractbiddingdocument = new ContractBiddingDocument();
+        $this->contract = new Contract();
+        $this->project = new Project();
 
     }
 	public function manageContractors()
@@ -195,7 +199,23 @@ class ContractorController extends BaseController
                     ];
                     $this->contractbidding->update($this->request->getVar('contract_bid_id'), $bid_data);
                     #Convert contract to project
-                    //$contract = $this->contractbidding->getBidById($this->request->getVar('contract_bid_id'));
+                    if($this->request->getVar('status') == 1){ //approve
+                        $contract_bid = $this->contractbidding->getBidById($this->request->getVar('contract_bid_id'));
+                        if(!empty($contract_bid)){
+                            $contract = $this->contract->getContractById($contract_bid['contract_bd_contract_id']);
+                            if(!empty($contract)){
+                                $project_data = [
+                                    'project_manager_id'=>$this->session->user_employee_id,
+                                    'project_name'=>$contract['contract_title'],
+                                    'project_sponsor'=>'N/A',
+                                    'project_description'=>$contract['contract_scope'],
+                                    'project_priority'=>1
+                                ];
+                                $this->project->save($project_data);
+                                return redirect()->back()->with("success", "<strong>Success!</strong> Your changes were saved.");
+                            }
+                        }
+                    }
                 }else{
                     return redirect()->back()->with("error", "<strong>Whoops!</strong> No record found.");
                 }

@@ -222,6 +222,24 @@
                 <li>
                   <a href="<?= route_to('manage-products') ?>">Manage Products</a>
                 </li>
+                  <li>
+                      <a href="<?= route_to('manage-contractors') ?>">Contractors</a>
+                  </li>
+                  <li>
+                      <a href="<?= route_to('contract-categories'); ?>">Contract Category</a>
+                  </li>
+                  <li>
+                      <a href="<?= route_to('add-new-contract'); ?>">Add New Contract</a>
+                  </li>
+                  <li>
+                      <a href="<?= route_to('all-contracts'); ?>">All Contracts</a>
+                  </li>
+                  <li>
+                      <a href="<?= route_to('manage-bids'); ?>">Bids</a>
+                  </li>
+                  <li>
+                      <a href="<?=route_to('contractor-license-category'); ?>">License Category</a>
+                  </li>
               </ul>
             </div>
           </li>
@@ -287,6 +305,15 @@
               <span> GDrive </span>
             </a>
           </li>
+                    <li>
+                        <a href="#procurementMenu" data-toggle="collapse">
+                            <i data-feather="briefcase"></i>
+
+                            <span> Procurement </span>
+                            <span class="menu-arrow"></span>
+                        </a>
+
+                    </li>
 
           <li>
             <a href="#settings" data-toggle="collapse">

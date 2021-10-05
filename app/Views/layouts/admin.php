@@ -715,38 +715,6 @@
                         </div>
                     </li>
                     <li>
-                        <a href="#procurementMenu" data-toggle="collapse">
-                            <i data-feather="briefcase"></i>
-
-                            <span> Procurement </span>
-                            <span class="menu-arrow"></span>
-                        </a>
-                        <div class="collapse" id="procurementMenu">
-                            <ul class="nav-second-level">
-                                <li>
-                                    <a href="<?= route_to('manage-contractors') ?>">Contractors</a>
-                                </li>
-                               <li>
-                                    <a href="<?= route_to('contract-categories'); ?>">Contract Category</a>
-                                </li>
-                                <li>
-                                    <a href="<?= route_to('add-new-contract'); ?>">Add New Contract</a>
-                                </li>
-                                <li>
-                                    <a href="<?= route_to('all-contracts'); ?>">All Contracts</a>
-                                </li>
-                                <li>
-                                    <a href="<?= route_to('manage-bids'); ?>">Bids</a>
-                                </li>
-                                <li>
-                                    <a href="<?=route_to('contractor-license-category'); ?>">License Category</a>
-                                </li>
-
-                            </ul>
-                        </div>
-                    </li>
-
-                    <li>
                         <a href="<?= site_url('g-drive') ?>">
                             <i data-feather="folder-plus"></i>
                             <span> GDrive </span>
