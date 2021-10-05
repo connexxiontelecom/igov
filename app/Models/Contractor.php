@@ -15,7 +15,8 @@ class Contractor extends Model
 	protected $useSoftDeletes       = false;
 	protected $protectFields        = true;
 	protected $allowedFields        = ['contractor_id','contractor_name','contractor_address','contractor_email',
-        'about_contractor','contractor_mobile_no','contractor_website','contractor_added_by'];
+        'about_contractor','contractor_mobile_no','contractor_website','contractor_added_by', 'contractor_license_category_id',
+        'contractor_license_status','contractor_status'];
 	// Dates
 	protected $useTimestamps        = false;
 	protected $dateFormat           = 'datetime';
@@ -49,7 +50,7 @@ class Contractor extends Model
 
     public function getContractorById($id){
         $builder = $this->db->table('contractors as c');
-        $builder->join('employees as e','e.employee_id = c.added_by' );
+        //$builder->join('employees as e','e.employee_id = c.added_by' );
         $builder->where('c.contractor_id = '.$id);
         return $builder->get()->getFirstRow();
     }

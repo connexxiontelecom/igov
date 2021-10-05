@@ -184,6 +184,7 @@ $routes->post('/email-settings', 'EmailController::processEmailSettings', ['filt
 $routes->get('/chat', 'ChatController::chat', ['filter'=>'auth']);
 $routes->post('/chat-messages', 'ChatController::getMessages', ['filter'=>'auth']);
 $routes->post('/send-message', 'ChatController::sendMessage', ['filter'=>'auth']);
+$routes->get('/test-chat', 'ChatController::getMessages', ['filter'=>'auth']);
 
 #Project routes
 $routes->get('/manage-projects','ProjectController::index',['filter'=>'auth', 'as'=>'manage-projects']);
@@ -204,7 +205,22 @@ $routes->post('/reminder/insert', 'ReminderController::insert', ['filter'=>'auth
 $routes->get('/manage-contractors', 'ContractorController::manageContractors',['filter'=>'auth', 'as'=>'manage-contractors']);
 $routes->get('/add-new-contractor', 'ContractorController::showNewContractorForm',['filter'=>'auth', 'as'=>'add-new-contractor']);
 $routes->post('/add-new-contractor', 'ContractorController::addNewContractor',['filter'=>'auth']);
+$routes->get('/contractor-details/(:num)', 'ContractorController::contractorDetail/$1',['filter'=>'auth', 'as'=>'contractor-detail']);
+$routes->post('/renew-license', 'ContractorController::renewLicense',['filter'=>'auth', 'as'=>'renew-license']);
+$routes->get('/manage-bids', 'ContractorController::manageBids',['filter'=>'auth','as'=>'manage-bids']);
+$routes->get('/view-bid/(:num)', 'ContractorController::viewBid/$1',['filter'=>'auth','as'=>'view-bid']);
+$routes->post('/update-bid-status', 'ContractorController::updateBidStatus', ['filter'=>'auth', 'as'=>'update-bid-status']);
 
+#Contract routes
+$routes->get('/contract-category', 'ContractController::showContractCategories',['filter'=>'auth','as'=>'contract-categories']);
+$routes->post('/contract-category', 'ContractController::showContractCategories',['filter'=>'auth']);
+$routes->get('/new-contract', 'ContractController::showContractForm',['filter'=>'auth','as'=>'add-new-contract']);
+$routes->post('/new-contract', 'ContractController::setNewContract',['filter'=>'auth']);
+$routes->get('/all-contracts', 'ContractController::allContracts',['filter'=>'auth','as'=>'all-contracts']);
+$routes->get('/view-contract/(:any)', 'ContractController::viewContract/$1',['filter'=>'auth','as'=>'view-contract']);
+$routes->get('/edit-contract/(:any)', 'ContractController::editContract/$1',['filter'=>'auth','as'=>'edit-contract']);
+$routes->post('/publish-contract', 'ContractController::publishContract',['filter'=>'auth','as'=>'publish-contract']);
+$routes->post('/contract/leave-comment', 'ContractController::setNewConversation',['filter'=>'auth','as'=>'leave-comment-contract']);
 
 #Vendor routes
 $routes->get('/manage-vendors', 'ProcurementController::manageVendors',['filter'=>'auth', 'as'=>'manage-vendors']);
@@ -215,6 +231,11 @@ $routes->post('/update-vendor', 'ProcurementController::updateVendor',['filter'=
 $routes->get('/manage-products', 'ProcurementController::manageProducts',['filter'=>'auth', 'as'=>'manage-products']);
 $routes->get('/add-new-product', 'ProcurementController::showNewProductForm',['filter'=>'auth', 'as'=>'add-new-product']);
 $routes->post('/add-new-product', 'ProcurementController::addNewProduct',['filter'=>'auth']);
+
+$routes->get('/contractor-license-category', 'ProcurementController::contractorLicenseCategory',['filter'=>'auth','as'=>'contractor-license-category']);
+$routes->post('/contractor-license-category', 'ProcurementController::storeContractorLicenseCategory',['filter'=>'auth','as'=>'contractor-license-category']);
+$routes->post('/update-contractor-license-category', 'ProcurementController::updateContractorLicenseCategory',['filter'=>'auth','as'=>'update-contractor-license-category']);
+$routes->get('/contractor-license-renewal', 'ProcurementController::contractorLicenseRenewal',['filter'=>'auth','as'=>'contractor-license-renewal']);
 
 // employee routes
 $routes->match(['get'], 'my-account', 'EmployeeController::my_account', ['filter' => 'auth']);
@@ -279,6 +300,14 @@ $routes->match(['get', 'post'], 'maintenance-schedules', 'FleetController::maint
 $routes->match(['get', 'post'], 'maintenance-schedule-calendar', 'FleetController::maintenance_schedule_calendar', ['filter' => 'auth']);
 $routes->match(['get', 'post'], 'maintenance-schedule-data', 'FleetController::maintenance_schedule_data', ['filter' => 'auth']);
 
+
+$routes->match(['get', 'post'], 'contractor-login', 'ContractorAuth::login', ['filter'=>'noauth', 'as'=>'contractor-login']);
+$routes->get('/contractor-dashboard', 'ContractorPortalController::dashboard',[ 'as'=>'contractor-dashboard', 'filter'=>'contractorauth']);
+$routes->get('/contract-listing', 'ContractorPortalController::contractListing',[ 'as'=>'contract-listing', 'filter'=>'contractorauth']);
+$routes->get('/contract-details/(:any)', 'ContractorPortalController::viewContractDetails/$1',[ 'as'=>'contract-details', 'filter'=>'contractorauth']);
+$routes->get('/bidding/(:any)', 'ContractorPortalController::showContractBiddingView/$1',[ 'as'=>'contract-bidding', 'filter'=>'contractorauth']);
+$routes->post('/submit-bid', 'ContractorPortalController::submitBid',[ 'as'=>'submit-bid', 'filter'=>'contractorauth']);
+$routes->get('/my-bids', 'ContractorPortalController::myBids',[ 'as'=>'my-bids', 'filter'=>'contractorauth']);
 
 /*
  * --------------------------------------------------------------------

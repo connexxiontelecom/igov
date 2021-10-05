@@ -21,6 +21,8 @@
 <!-- Buttons init js-->
 <script src="/assetsa/js/pages/loading-btn.init.js"></script>
 
+<script src="/assetsa/libs/dropzone/min/dropzone.min.js"></script>
+<script src="/assetsa/libs/select2/js/select2.min.js"></script>
 <!-- Plugins js-->
 <script src="/assetsa/libs/flatpickr/flatpickr.min.js"></script>
 

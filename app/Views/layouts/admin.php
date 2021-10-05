@@ -711,16 +711,9 @@
                                 <li>
                                     <a href="<?= route_to('manage-projects') ?>">Manage Projects</a>
                                 </li>
-
-                                <li>
-                                    <a href="<?=route_to('manage-contractors'); ?>">Contractors</a>
-                                </li>
-
-
                             </ul>
                         </div>
                     </li>
-
                     <li>
                         <a href="<?= site_url('g-drive') ?>">
                             <i data-feather="folder-plus"></i>

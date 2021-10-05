@@ -1,4 +1,4 @@
-<?= $this->extend('layouts/admin'); ?>
+<?= $this->extend('layouts/master'); ?>
 
 <?= $this->section('extra-styles') ?>
 <link href="/assets/libs/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
@@ -111,6 +111,14 @@
                                             <?= $validation->getError('about_contractor') ?>
                                         </div>
                                     <?php endif; ?>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="">Attachment</label>
+                                    <input type="file" name="attachment" class="form-control-file">
                                 </div>
                             </div>
                         </div>
