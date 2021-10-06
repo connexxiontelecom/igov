@@ -38,12 +38,12 @@ class ContractController extends BaseController
         $data = [
             'firstTime'=>$this->session->firstTime,
             'username'=>$this->session->username,
-            //'contractors'=>$this->contractor->getAllContractors()
+            'contractcategories'=>$this->contractcategory->getContractCategories()
         ];
         return view('pages/procurement/contract-categories',$data);
 	}
 
-	public function saaaveContractCategory(){
+	public function storeContractCategory(){
         //'contract_cat_name','contract_cat_description
 
     }
@@ -66,6 +66,29 @@ class ContractController extends BaseController
 
             $this->contractcategory->save($data);
             return redirect()->back()->with("success", "<strong>Success!</strong> New contractor added");
+        }
+    }
+    public function updateContractCategory(){
+        $inputs = $this->validate([
+            'category_name' => ['rules'=> 'required', 'label'=>'Category name','errors' => [
+                'required' => 'Enter category name']],
+            'catid'=>['rules'=>'required']
+        ]);
+        if (!$inputs) {
+            return view('pages/procurement/contract-categories', [
+                'validation' => $this->validator,
+                'firstTime'=>$this->session->firstTime,
+                'username'=>$this->session->username,
+            ]);
+        }else{
+            $catid = $this->request->getVar('catid');
+            $data = [
+                'contract_cat_name'=>$this->request->getPost('category_name'),
+                'contract_cat_description'=>$this->request->getPost('description')
+            ];
+
+            $this->contractcategory->update($catid,$data);
+            return redirect()->back()->with("success", "<strong>Success!</strong> Your changes were saved");
         }
     }
 

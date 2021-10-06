@@ -83,7 +83,64 @@
 
                     <tbody>
                     <?php  $serial = 1; ?>
-
+                    <?php foreach ($contractcategories as $cat): ?>
+                        <tr>
+                            <td><?= $serial++ ?></td>
+                            <td><?= $cat['contract_cat_name'] ?? '' ?></td>
+                            <td><?= $cat['contract_cat_description'] ?? '' ?></td>
+                            <td>
+                                <a href="javascript:void(0);" data-target="#catModal_<?= $cat['contract_category_id'] ?>"  data-toggle="modal" class="btn btn-sm btn-info">View</a>
+                                <div class="modal fade" id="catModal_<?= $cat['contract_category_id'] ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form action="<?= route_to('edit-contract-categories') ?>" method="post">
+                                                    <?= csrf_field() ?>
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <label for="">Category Name</label>
+                                                                <input type="text" name="category_name" value="<?= $cat['contract_cat_name'] ?>" placeholder="Category Name" class="form-control">
+                                                                <?php if ($validation->getError('category_name')): ?>
+                                                                    <div class="text-danger">
+                                                                        <?= $validation->getError('category_name') ?>
+                                                                    </div>
+                                                                <?php endif; ?>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <label for="">Description</label>
+                                                                <textarea  name="description" placeholder="Description..." class="form-control"><?= $cat['contract_cat_description'] ?></textarea>
+                                                                <?php if ($validation->getError('description')): ?>
+                                                                    <div class="text-danger">
+                                                                        <?= $validation->getError('description') ?>
+                                                                    </div>
+                                                                <?php endif; ?>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-12 d-flex justify-content-center">
+                                                            <div class="btn-group">
+                                                                <input type="hidden" name="catid" value="<?= $cat['contract_category_id'] ?>">
+                                                                <button type="button" class="btn btn-secondary"  data-dismiss="modal">Close</button>
+                                                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>

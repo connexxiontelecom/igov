@@ -40,4 +40,9 @@ class ContractCategory extends Model
 	protected $afterFind            = [];
 	protected $beforeDelete         = [];
 	protected $afterDelete          = [];
+
+
+	public function getContractCategories(){
+	    return ContractCategory::orderBy('contract_cat_name', 'ASC')->findAll();
+    }
 }
