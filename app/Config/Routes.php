@@ -213,7 +213,8 @@ $routes->post('/update-bid-status', 'ContractorController::updateBidStatus', ['f
 
 #Contract routes
 $routes->get('/contract-category', 'ContractController::showContractCategories',['filter'=>'auth','as'=>'contract-categories']);
-$routes->post('/contract-category', 'ContractController::showContractCategories',['filter'=>'auth']);
+$routes->post('/contract-category', 'ContractController::saveContractCategory',['filter'=>'auth']);
+$routes->post('/edit-contract-category', 'ContractController::updateContractCategory',['filter'=>'auth','as'=>'edit-contract-categories']);
 $routes->get('/new-contract', 'ContractController::showContractForm',['filter'=>'auth','as'=>'add-new-contract']);
 $routes->post('/new-contract', 'ContractController::setNewContract',['filter'=>'auth']);
 $routes->get('/all-contracts', 'ContractController::allContracts',['filter'=>'auth','as'=>'all-contracts']);
