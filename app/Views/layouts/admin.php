@@ -720,6 +720,20 @@
                             <span> GDrive </span>
                         </a>
                     </li>
+                    <li>
+                        <a href="#procurementMenu" data-toggle="collapse">
+                            <i data-feather="grid"></i>
+                            <span> Procurement </span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <div class="collapse" id="procurementMenu">
+                            <ul class="nav-second-level">
+                                <li>
+                                    <a href="<?= route_to('contract-categories'); ?>">Contract Category</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
 					
 					
 				</ul>
