@@ -731,6 +731,9 @@
                                 <li>
                                     <a href="<?= route_to('contract-categories'); ?>">Contract Category</a>
                                 </li>
+                                <li>
+                                    <a href="<?=route_to('contractor-license-category'); ?>">License Category</a>
+                                </li>
                             </ul>
                         </div>
                     </li>
