@@ -50,7 +50,7 @@
                         </div>
                     </div>
 
-                    <div class="row" style="margin-top: -50px">
+                    <div class="row mt-4" style="margin-top: -50px">
                         <div class="col-lg-6">
                             <div class="card-box">
                                 <h5 class="text-uppercase bg-light p-2 mt-0 mb-3">Contractor Details</h5>
