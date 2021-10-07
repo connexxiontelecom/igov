@@ -1,4 +1,4 @@
-<?= $this->extend('layouts/master'); ?>
+<?= $this->extend('layouts/admin'); ?>
 
 <?= $this->section('content'); ?>
 <?php $validation =  \Config\Services::validation(); ?>
