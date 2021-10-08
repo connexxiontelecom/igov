@@ -4,21 +4,17 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class Contract extends Model
+class ContractorAttachment extends Model
 {
 	protected $DBGroup              = 'default';
-	protected $table                = 'contracts';
-	protected $primaryKey           = 'contract_id';
+	protected $table                = 'contractor_attachments';
+	protected $primaryKey           = 'id';
 	protected $useAutoIncrement     = true;
 	protected $insertID             = 0;
 	protected $returnType           = 'array';
 	protected $useSoftDeletes       = false;
 	protected $protectFields        = true;
-	protected $allowedFields        = ['contract_title','contract_scope','contract_eligibility','contract_published_by',
-        'contract_published_date','contract_certificate','contract_opening_date','contract_closing_date','contract_status',
-        'contract_slug', 'contract_category_id'];
-
-
+	protected $allowedFields        = ['contractor_attachment_id','contractor_attach_contractor_id','contractor_attachment'];
 
 	// Dates
 	protected $useTimestamps        = false;
@@ -45,18 +41,7 @@ class Contract extends Model
 	protected $afterDelete          = [];
 
 
-	public function getAllContracts(){
-	    return Contract::orderBy('contract_id', 'DESC')->findAll();
-    }
-
-    public function getContractBySlug($slug){
-	    return Contract::where('contract_slug', $slug)->first();
-    }
-
-    public function getContractById($id){
-       /* $builder = $this->db->table('contracts as c');
-        $builder->where('c.contract_id = '.$id);
-        return $builder->get()->getFirstRow();*/
-        return Contract::where('contract_id', $id)->first();
+	public function getContractorAttachmentsByContractorId($id){
+	    return ContractorAttachment::where('contractor_attach_contractor_id', $id)->findAll();
     }
 }

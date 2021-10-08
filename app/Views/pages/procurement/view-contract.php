@@ -15,7 +15,7 @@
                         <li class="breadcrumb-item"><a href="javascript: void(0);">Contract Details</a></li>
                     </ol>
                 </div>
-                <h4 class="page-title">Contract Detail</h4>
+                <h4 class="page-title">Contract Details</h4>
             </div>
         </div>
     </div>
@@ -28,7 +28,7 @@
                         <div class="col-lg-8">
                             <h4 class="header-title">Contract Detail</h4>
                             <p class="text-muted font-13">
-                                Detail for this contract
+                                Details for this contract
                             </p>
                         </div>
                         <div class="col-lg-4">
@@ -37,7 +37,7 @@
                                 <a href="<?= route_to('all-contracts') ?>" class="btn btn-success btn-sm">Back</a>
                             </div>
                             <?php if($contract['contract_status'] == 0): ?>
-                            <button class="btn btn-secondary" data-target="#publishContractModal" data-toggle="modal">Publish Contract</button>
+                            <button class="btn btn-danger" data-target="#publishContractModal" data-toggle="modal">Publish Contract</button>
                             <?php endif; ?>
                         </div>
                     </div>
@@ -54,21 +54,6 @@
                             <!-- project card -->
                             <div class="card d-block">
                                 <div class="card-body">
-                                    <div class="dropdown float-right">
-                                        <a href="#" class="dropdown-toggle arrow-none card-drop" data-toggle="dropdown" aria-expanded="false">
-                                            <i class="dripicons-dots-3"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-right">
-                                            <!-- item-->
-                                            <a href="javascript:void(0);" class="dropdown-item"><i class="mdi mdi-pencil mr-1"></i>Edit</a>
-                                            <!-- item-->
-                                            <a href="javascript:void(0);" class="dropdown-item"><i class="mdi mdi-delete mr-1"></i>Delete</a>
-                                            <!-- item-->
-                                            <a href="javascript:void(0);" class="dropdown-item"><i class="mdi mdi-email-outline mr-1"></i>Invite</a>
-                                            <!-- item-->
-                                            <a href="javascript:void(0);" class="dropdown-item"><i class="mdi mdi-exit-to-app mr-1"></i>Leave</a>
-                                        </div>
-                                    </div>
                                     <!-- project title-->
                                     <h3 class="mt-0 font-20">
                                         <?= $contract['contract_title'] ?? ''?>
@@ -121,6 +106,7 @@
                                         <textarea name="comment" class="form-control form-control-light mb-2" style="resize:none;" placeholder="Write message" id="example-textarea" rows="3"></textarea>
                                         <div class="text-right">
                                             <input type="hidden" name="contract_cm_id" value="<?= $contract['contract_id'] ?>">
+                                            <input type="hidden" name="contract_cm_slug" value="<?= $contract['contract_slug'] ?>">
                                             <div class="btn-group mb-2 ml-2">
                                                 <button type="submit" class="btn btn-primary btn-sm">Submit</button>
                                             </div>
@@ -176,6 +162,34 @@
                                     <?php else: ?>
                                         <h5 class="text-center">No attachments</h5>
                                     <?php endif; ?>
+                                    <h5 class="card-title mb-3 mt-4">Certificate of "No Objection."</h5>
+                                    <?php if(!is_null($contract['contract_certificate'])): ?>
+                                            <div class="card mb-1 shadow-none border">
+                                                <div class="p-2">
+                                                    <div class="row align-items-center">
+                                                        <div class="col-auto">
+                                                            <div class="avatar-sm">
+                                                            <span class="avatar-title badge-soft-primary text-primary rounded">
+                                                                FILE
+                                                            </span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col pl-0">
+                                                            <a href="javascript:void(0);" class="text-muted font-weight-bold"><?= substr($contract['contract_title'],0,23) ?></a>
+                                                        </div>
+                                                        <div class="col-auto">
+                                                            <!-- Button -->
+                                                            <a target="_blank" href="/uploads/posts/<?=$contract['contract_certificate'] ?>" class="btn btn-link btn-lg text-muted">
+                                                                <i class="dripicons-download"></i>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                    <?php else: ?>
+                                        <h5 class="text-center">No certificate</h5>
+                                    <?php endif; ?>
+                                    <h5 class="card-title mb-3 mt-4">Bids</h5>
                                 </div>
                             </div>
                         </div>
@@ -202,6 +216,7 @@
                             </div>
                             <div class="col-md-12 d-flex justify-content-center">
                                 <input type="hidden" name="contract_id" value="<?= $contract['contract_id'] ?>">
+                                <input type="hidden" name="contract_slug" value="<?= $contract['contract_slug'] ?>">
                                 <div class="form-group">
                                     <div class="btn-group">
                                         <button class="btn btn-secondary btn-sm" type="button">Cancel</button>

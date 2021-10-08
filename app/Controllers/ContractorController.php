@@ -6,7 +6,9 @@ use App\Controllers\BaseController;
 use App\Models\Contract;
 use App\Models\ContractBidding;
 use App\Models\ContractBiddingDocument;
+use App\Models\ContractCategory;
 use App\Models\Contractor;
+use App\Models\ContractorAttachment;
 use App\Models\ContractorLicense;
 use App\Models\ContractorLicenseCategory;
 use App\Models\Employee;
@@ -30,6 +32,8 @@ class ContractorController extends BaseController
         $this->contractbiddingdocument = new ContractBiddingDocument();
         $this->contract = new Contract();
         $this->project = new Project();
+        $this->contractcategory = new ContractCategory();
+        $this->contractorattachment = new ContractorAttachment();
 
     }
 	public function manageContractors()
@@ -45,7 +49,8 @@ class ContractorController extends BaseController
 	public function showNewContractorForm(){
         $data = [
             'firstTime'=>$this->session->firstTime,
-            'username'=>$this->session->username
+            'username'=>$this->session->username,
+            'licenses'=>$this->contractorlicensecategory->getAllContractorLicenseCategory(),
         ];
         return view('pages/project/add-new-contractor', $data);
     }
@@ -55,13 +60,15 @@ class ContractorController extends BaseController
                 'required' => 'Enter contractor name']],
             'email' => ['rules'=> 'required', 'errors'=>['required'=>'Enter valid email address']],
             'mobile_no' => ['rules'=> 'required', 'errors'=>['required'=>'Enter a functional mobile number']],
-            'address' => ['rules'=>'required', 'errors'=>['Enter contractor office address']]
+            'address' => ['rules'=> 'required', 'errors'=>['required'=>'Enter contractor office address']],
+            'contractor_license' => ['rules'=> 'required', 'errors'=>['required'=>'Select contractor license']],
         ]);
         if (!$inputs) {
             return view('pages/project/add-new-contractor', [
                 'validation' => $this->validator,
                 'firstTime'=>$this->session->firstTime,
                 'username'=>$this->session->username,
+                'licenses'=>$this->contractorlicensecategory->getAllContractorLicenseCategory(),
             ]);
         }else{
             $data = [
@@ -70,10 +77,26 @@ class ContractorController extends BaseController
               'contractor_mobile_no'=>$this->request->getPost('mobile_no'),
               'contractor_website'=>$this->request->getPost('website'),
               'about_contractor'=>$this->request->getPost('about_contractor'),
-              'contractor_address'=>$this->request->getPost('address')
+              'contractor_address'=>$this->request->getPost('address'),
+              'contractor_added_by'=>$this->session->user_employee_id,
+                'contractor_license_id'=>$this->request->getPost('contractor_license'),
+                'contractor_license_category_id'=>$this->request->getPost('contractor_license'),
             ];
-
-            $this->contractor->save($data);
+            $contractor_id = $this->contractor->insert($data);
+            #Contractor attachment
+            if($this->request->getFileMultiple('attachments')){
+                foreach ($this->request->getFileMultiple('attachments') as $attachmen){
+                    if($attachmen->isValid() ){
+                        $filename = $attachmen->getRandomName();
+                        $attachmen->move('uploads/posts', $filename);
+                        $contractor_attachment = [
+                            'contractor_attach_contractor_id' => $contractor_id,
+                            'contractor_attachment' => $filename
+                        ];
+                        $this->contractorattachment->save($contractor_attachment);
+                    }
+                }
+            }
             return redirect()->back()->with("success", "<strong>Success!</strong> New contractor added");
         }
     }
@@ -86,7 +109,8 @@ class ContractorController extends BaseController
               'firstTime'=>$this->session->firstTime,
               'username'=>$this->session->username,
               'categories'=>$this->contractorlicensecategory->getAllContractorLicenseCategory(),
-              'licenses'=>$this->contractorlicense->getContractorLicenseByContractorId($id)
+              'licenses'=>$this->contractorlicense->getContractorLicenseByContractorId($id),
+                'documents'=>$this->contractorattachment->getContractorAttachmentsByContractorId($id)
             ];
             return view('pages/procurement/contractor-detail', $data);
         }else{

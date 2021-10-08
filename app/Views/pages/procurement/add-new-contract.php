@@ -30,10 +30,15 @@
     </div>
     <div class="row" style="padding-bottom: 0px !important;">
         <div class="col-12">
-            <form action="<?= route_to('add-new-contract') ?>" method="post" enctype="multipart/form-data">
-                <?= csrf_field() ?>
-                <div class="card">
-                    <div class="card-body">
+            <div class="card">
+                <div class="card-body">
+                    <div class="text-lg-right mt-lg-0">
+                        <div class="btn-group mr-2">
+                            <a href="<?= route_to('all-contracts') ?>" class="btn btn-success btn-sm"><i class="mdi mdi-library mr-1"></i> All Contracts</a>
+                        </div>
+                    </div>
+                    <form action="<?= route_to('add-new-contract') ?>" method="post" enctype="multipart/form-data">
+                        <?= csrf_field() ?>
                         <div class="row">
                             <div class="col-xl-6">
                                 <div class="form-group">
@@ -128,18 +133,34 @@
                                     <?php endif; ?>
                                 </div>
                             </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="">Contract Category</label>
+                                    <select name="contract_category" id="contract_category" class="form-control">
+                                        <option selected disabled>--Select contract category--</option>
+                                        <?php foreach($contract_categories as $cat): ?>
+                                            <option value="<?= $cat['contract_category_id'] ?>"><?= $cat['contract_cat_name'] ?> </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                    <?php if ($validation->getError('contract_category')): ?>
+                                        <div class="text-danger">
+                                            <?= $validation->getError('contract_category') ?>
+                                        </div>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
                         </div>
                         <!-- end row -->
                         <div class="row mt-3">
                             <div class="col-12 text-center">
-                                <button type="submit" class="btn btn-success waves-effect waves-light m-1"><i class="fe-check-circle mr-1"></i> Create</button>
                                 <button type="button" class="btn btn-light waves-effect waves-light m-1"><i class="fe-x mr-1"></i> Cancel</button>
+                                <button type="submit" class="btn btn-success waves-effect waves-light m-1"><i class="fe-check-circle mr-1"></i> Create</button>
                             </div>
                         </div>
-
-                    </div>
+                    </form>
                 </div>
-            </form>
+
+            </div>
         </div>
     </div>
 </div>

@@ -41,8 +41,7 @@
                             S/No.
                         </th>
                         <th>Category Name</th>
-                        <th>Max. # of Contracts</th>
-                        <th>Subscription</th>
+                        <th>Amount(Band)</th>
                         <th class="hidden-sm">Action</th>
                     </tr>
                     </thead>

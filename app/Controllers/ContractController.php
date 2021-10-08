@@ -98,6 +98,7 @@ class ContractController extends BaseController
             'username'=>$this->session->username,
             'department_employees'=>$this->_get_department_employees(),
             'employees'=>$this->employee->getAllEmployee(),
+            'contract_categories'=>$this->contractcategory->getContractCategories(),
             'tender'=>0
         ];
         return view('pages/procurement/add-new-contract',$data);
@@ -113,7 +114,8 @@ class ContractController extends BaseController
             'closing_date'=>'required',
             'certificate'=>'uploaded[certificate]',
             'tender_documents.*'=>'uploaded[tender_documents]',
-            'tender_board'=>'required'
+            'tender_board'=>'required',
+            'contract_category'=>'required'
         ],[
             'title'=>['required'=>'Enter contract title'],
             'scope'=>['required'=>"What's the scope of this contract? Enter it here"],
@@ -121,7 +123,8 @@ class ContractController extends BaseController
             'opening_date'=>['required'=>"When will this contract be open for application? Choose a date"],
             'closing_date'=>['required'=>"When will this contract be considered as close for application? Choose a date"],
             'certificate'=>['uploaded'=>"Upload certificate of No Objection."],
-            'tender_board'=>['required'=>'Select board members for this contract']
+            'tender_board'=>['required'=>'Select board members for this contract'],
+            'contract_category'=>['required'=>'Select contract category']
         ]);
         if($attachments = $this->request->getFiles())
         {
@@ -135,6 +138,7 @@ class ContractController extends BaseController
                         'firstTime'=>$this->session->firstTime,
                         'username'=>$this->session->username,
                         'employees'=>$this->employee->getAllEmployee(),
+                        'contract_categories'=>$this->contractcategory->getContractCategories(),
                         'tender'=>1
                     ]);
                 }
@@ -149,14 +153,24 @@ class ContractController extends BaseController
                 'tender'=>0
             ]);
         }else{
+            $filename = '';
+            if($this->request->getFile('certificate')) {
+                $certificate = $this->request->getFile('certificate');
+                if ($certificate->isValid()) {
+                    $extension = $certificate->guessExtension();
+                    $filename = $certificate->getRandomName(); // uniqid() . time() . '.' . $extension;
+                    $certificate->move('uploads/posts', $filename);
+                }
+            }
             $data = [
                'contract_title'=>$this->request->getPost('title'),
                'contract_scope'=>$this->request->getPost('scope'),
                'contract_eligibility'=>$this->request->getPost('eligibility'),
-               'contract_certificate'=>$this->request->getPost('certificate'),
+               'contract_certificate'=>$filename,
                'contract_opening_date'=>$this->request->getPost('opening_date'),
                'contract_closing_date'=>$this->request->getPost('closing_date'),
-               'contract_slug'=>substr(sha1(time()),23,40)
+               'contract_slug'=>substr(sha1(time()),23,40),
+                'contract_category_id'=>$this->request->getPost('contract_category')
             ];
             $contract_id = $this->contract->insert($data);
             #Contract attachment
@@ -174,6 +188,7 @@ class ContractController extends BaseController
                     }
                 }
             }
+
             #Board members
             foreach ($this->request->getVar('tender_board') as $board){
                 $board_data = [
@@ -272,9 +287,10 @@ class ContractController extends BaseController
               'contract_status'=>1
             ];
             $this->contract->update($this->request->getVar('contract_id'), $data);
-            return redirect()->back()->with("success", "<strong>Success!</strong> Your contract was published");
+            return redirect()->to(site_url('view-contract')."/".$this->request->getPost('contract_slug'));
         }else{
-            return redirect()->back()->with("error", "<strong>Whoops!</strong> No record found.");
+            //return redirect()->back()->with("error", "<strong>Whoops!</strong> No record found.");
+            return redirect()->to(site_url('view-contract')."/".$this->request->getPost('contract_slug'));
         }
     }
 
@@ -286,13 +302,15 @@ class ContractController extends BaseController
         if (!$inputs) {
             return redirect()->back()->with("error", "<strong>Whoops!</strong> ");
         }else{
+            $slug = $this->request->getPost('contract_cm_slug');
             $data = [
                 'contract_convo_employee_id'=>$this->session->user_employee_id,
                 'contract_convo'=>$this->request->getPost('comment'),
                 'contract_convo_contract_id'=>$this->request->getPost('contract_cm_id')
             ];
             $this->contractcoversation->save($data);
-            return redirect()->back()->with("success", "<strong>Success!</strong> Comment registered");
+            return redirect()->to(site_url('view-contract')."/".$slug);
+
         }
     }
 
