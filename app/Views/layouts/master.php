@@ -271,9 +271,6 @@
                         <a href="<?= route_to('manage-contractors') ?>">Contractors</a>
                     </li>
                     <li>
-                        <a href="<?= route_to('add-new-contract'); ?>">Add New Contract</a>
-                    </li>
-                    <li>
                         <a href="<?= route_to('all-contracts'); ?>">All Contracts</a>
                     </li>
                     <li>

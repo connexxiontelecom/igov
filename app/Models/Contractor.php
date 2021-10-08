@@ -16,7 +16,7 @@ class Contractor extends Model
 	protected $protectFields        = true;
 	protected $allowedFields        = ['contractor_id','contractor_name','contractor_address','contractor_email',
         'about_contractor','contractor_mobile_no','contractor_website','contractor_added_by', 'contractor_license_category_id',
-        'contractor_license_status','contractor_status'];
+        'contractor_license_status','contractor_status', 'contractor_license_id'];
 	// Dates
 	protected $useTimestamps        = false;
 	protected $dateFormat           = 'datetime';
@@ -44,8 +44,9 @@ class Contractor extends Model
 
 
     public function getAllContractors(){
-        $builder = $this->db->table('contractors');
-        return $builder->get()->getResultArray();
+        return Contractor::orderBy('contractor_name', 'ASC')->findAll();
+        /*$builder = $this->db->table('contractors');
+        return $builder->get()->getResultArray();*/
     }
 
     public function getContractorById($id){

@@ -35,8 +35,12 @@ $this->extend('layouts/master')
         <div class="col-xl-12">
             <div class="card">
                 <div class="card-body">
-
-
+                    <h4>All Contracts</h4>
+                    <div class="btn-group mr-2 mb-2 float-right">
+                        <a href="<?= route_to('add-new-contract') ?>" class="btn btn-success btn-sm">
+                            <i class="mdi mdi-plus-circle mr-1"></i>New Contract
+                        </a>
+                    </div>
 
                     <table id="datatable-buttons" class="table table-striped dt-responsive nowrap w-100">
                         <thead>
@@ -45,8 +49,9 @@ $this->extend('layouts/master')
                             <th>Title</th>
                             <th>Opening Date</th>
                             <th>Closing Date</th>
+                            <th>Days Left</th>
                             <th> Status </th>
-                            <th> Date </th>
+                            <th> Posted Date </th>
                             <th>Action</th>
 
                         </tr>
@@ -59,6 +64,7 @@ $this->extend('layouts/master')
                                 <td><?= $contract['contract_title'] ?></td>
                                 <td class="text-success"><?= date('d M, Y', strtotime($contract['contract_opening_date'])) ?></td>
                                 <td class="text-danger"><?= date('d M, Y', strtotime($contract['contract_closing_date'])) ?></td>
+                                <td>Days left</td>
                                 <td><?php
                                     if($contract['contract_status'] == 0):?>
                                         Unpublished
@@ -68,7 +74,7 @@ $this->extend('layouts/master')
                                         Closed
                                     <?php endif; ?>
                                 </td>
-                                <td><?= $contract['created_at'] ?></td>
+                                <td><?= date('d M, Y', strtotime($contract['created_at'])) ?></td>
                                 <td>
                                     <div class="btn-group dropdown">
                                         <a href="javascript: void(0);" class="table-action-btn dropdown-toggle arrow-none btn btn-light btn-sm" data-toggle="dropdown" aria-expanded="false"><i class="mdi mdi-dots-horizontal"></i></a>

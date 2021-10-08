@@ -8,10 +8,10 @@
                 <div class="page-title-right">
                     <ol class="breadcrumb m-0">
                         <li class="breadcrumb-item"><a href="<?= site_url('office') ?>">iGov</a></li>
-                        <li class="breadcrumb-item active">Create New Contract</li>
+                        <li class="breadcrumb-item active">Edit Contract</li>
                     </ol>
                 </div>
-                <h4 class="page-title">Create New Contract</h4>
+                <h4 class="page-title">Edit Contract</h4>
             </div>
         </div>
     </div>
@@ -43,7 +43,7 @@
                             <div class="col-xl-6">
                                 <div class="form-group">
                                     <label for="registry-name">Title</label>
-                                    <input type="text" placeholder="Title" id="registry-name" name="title" class="form-control" >
+                                    <input type="text" placeholder="Title" value="<?= $contract['contract_title'] ?>" id="registry-name" name="title" class="form-control" >
                                     <?php if ($validation->getError('title')): ?>
                                         <div class="text-danger">
                                             <?= $validation->getError('title') ?>
@@ -53,7 +53,7 @@
 
                                 <div class="form-group">
                                     <label for="site-desc">Scope of Work</label>
-                                    <textarea class="form-control" placeholder="Scope of Work" name="scope" id="site-desc" rows="4"></textarea>
+                                    <textarea class="form-control" placeholder="Scope of Work" name="scope" id="site-desc" rows="4"><?= $contract['contract_scope'] ?></textarea>
                                     <?php if ($validation->getError('scope')): ?>
                                         <div class="text-danger">
                                             <?= $validation->getError('scope') ?>
@@ -62,7 +62,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="site-desc">Eligibility</label>
-                                    <textarea class="form-control" placeholder="Eligibility" name="eligibility" id="site-desc" rows="4"></textarea>
+                                    <textarea class="form-control" placeholder="Eligibility" name="eligibility" id="site-desc" rows="4"><?= $contract['contract_eligibility'] ?></textarea>
                                     <?php if ($validation->getError('eligibility')): ?>
                                         <div class="text-danger">
                                             <?= $validation->getError('eligibility') ?>
@@ -154,7 +154,7 @@
                         <div class="row mt-3">
                             <div class="col-12 text-center">
                                 <button type="button" class="btn btn-light waves-effect waves-light m-1"><i class="fe-x mr-1"></i> Cancel</button>
-                                <button type="submit" class="btn btn-success waves-effect waves-light m-1"><i class="fe-check-circle mr-1"></i> Create</button>
+                                <button type="submit" class="btn btn-success waves-effect waves-light m-1"><i class="fe-check-circle mr-1"></i> Save Changes</button>
                             </div>
                         </div>
                     </form>

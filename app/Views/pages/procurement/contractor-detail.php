@@ -74,6 +74,10 @@
                                     <label for="registry-name">Contractor Website</label>
                                     <input type="text" readonly  class="form-control" value="<?= $contractor->contractor_website ?>" required="">
                                 </div>
+                                <div class="form-group mb-3">
+                                    <label for="registry-name">Contractor License</label>
+                                    <input type="text" readonly  class="form-control" value="<?= $contractor->contractor_website ?>" required="">
+                                </div>
 
                                 <div class="form-group">
                                     <label for="site-desc">About Contractor</label>
@@ -84,6 +88,34 @@
                         <div class="col-lg-6">
                             <div class="card-box">
                                 <h5 class="text-uppercase mt-0 mb-3 bg-light p-2">Documents</h5>
+                                <?php if(count($documents) > 0): ?>
+                                    <?php foreach($documents as $attachment):?>
+                                        <div class="card mb-1 shadow-none border">
+                                            <div class="p-2">
+                                                <div class="row align-items-center">
+                                                    <div class="col-auto">
+                                                        <div class="avatar-sm">
+                                                            <span class="avatar-title badge-soft-primary text-primary rounded">
+                                                                FILE
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col pl-0">
+                                                        <a href="javascript:void(0);" class="text-muted font-weight-bold"><?= substr($contractor->contractor_name,0,23) ?></a>
+                                                    </div>
+                                                    <div class="col-auto">
+                                                        <!-- Button -->
+                                                        <a target="_blank" href="/uploads/posts/<?=$attachment['contractor_attachment'] ?>" class="btn btn-link btn-lg text-muted">
+                                                            <i class="dripicons-download"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <h5 class="text-center">No attachments</h5>
+                                <?php endif; ?>
                                 <h5 class="text-uppercase mt-0 mb-3 bg-light p-2">Renewal Log</h5>
                                 <div class="mt-5" style="height: 300px; overflow: auto">
                                     <ul class="list-unstyled p-2">
