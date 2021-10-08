@@ -4,44 +4,40 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class Notifications extends Migration
+class Stamps extends Migration
 {
 	public function up()
 	{
 		$this->db->disableForeignKeyChecks();
 		$this->forge->addField(
 			[
-				'notification_id' => [
+				'stamp_id' => [
 					'type' => 'INT',
 					'constraint' => 11,
 					'auto_increment' => true,
 				],
 
-				'action' =>[
+				'stamp_type' =>[
 					'type' => 'TEXT',
 				],
 
-				'description' =>[
+				'stamp_status' =>[
+					'type' => 'INT',
+				],
+
+				'stamp_users' =>[
 					'type' => 'TEXT',
 				],
 
-				'initiator_id' =>[
-					'type' => 'INT',
-				],
-
-				'target_id' =>[
-					'type' => 'INT',
-				],
-
-				'notification_status' =>[
-					'type' => 'INT',
+				'stamp_image' =>[
+					'type' => 'TEXT',
 				],
 
 				'created_at datetime default current_timestamp',
 			]
 		);
-		$this->forge->addKey('notification_id', true);
-		$this->forge->createTable('notifications');
+		$this->forge->addKey('stamp_id', true);
+		$this->forge->createTable('stamps');
 	}
 
 	public function down()
