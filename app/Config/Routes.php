@@ -219,7 +219,7 @@ $routes->get('/new-contract', 'ContractController::showContractForm',['filter'=>
 $routes->post('/new-contract', 'ContractController::setNewContract',['filter'=>'auth']);
 $routes->get('/all-contracts', 'ContractController::allContracts',['filter'=>'auth','as'=>'all-contracts']);
 $routes->get('/view-contract/(:any)', 'ContractController::viewContract/$1',['filter'=>'auth','as'=>'view-contract']);
-$routes->get('/edit-contract/(:any)', 'ContractController::editContract/$1',['filter'=>'auth','as'=>'edit-contract']);
+$routes->get('/edit-contract/(:any)', 'ContractController::showEditContractForm/$1',['filter'=>'auth','as'=>'edit-contract']);
 $routes->post('/publish-contract', 'ContractController::publishContract',['filter'=>'auth','as'=>'publish-contract']);
 $routes->post('/contract/leave-comment', 'ContractController::setNewConversation',['filter'=>'auth','as'=>'leave-comment-contract']);
 

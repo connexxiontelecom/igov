@@ -274,6 +274,24 @@ class ContractController extends BaseController
         }
     }
 
+    public function showEditContractForm($slug){
+        $contract = $this->contract->getContractBySlug($slug);
+        if(!empty($contract)){
+            $data = [
+                'firstTime'=>$this->session->firstTime,
+                'username'=>$this->session->username,
+                'department_employees'=>$this->_get_department_employees(),
+                'employees'=>$this->employee->getAllEmployee(),
+                'contract_categories'=>$this->contractcategory->getContractCategories(),
+                'contract'=>$contract,
+                'tender'=>0
+            ];
+            return view('pages/procurement/edit-contract',$data);
+        }else{
+            return redirect()->back();
+        }
+
+    }
     public function publishContract(){
         helper(['form', 'url']);
         $validate = $this->validate([
