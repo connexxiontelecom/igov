@@ -576,8 +576,9 @@
 								<li>
 									<a href="<?=site_url('notice-board'); ?>">Manage Notice Board</a>
 								</li>
-								
-							
+								<li>
+									<a href="<?=site_url('manage-stamp'); ?>">Manage Stamp</a>
+								</li>
 							</ul>
 						</div>
 					</li>

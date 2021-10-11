@@ -6,6 +6,7 @@ use App\Models\Department;
 use App\Models\Organization;
 use App\Models\Position;
 use App\Models\Employee;
+use App\Models\Stamp;
 use App\Models\Token;
 use App\Models\UserModel;
 use App\Models\Verification;
@@ -24,12 +25,14 @@ class EmployeeController extends BaseController
 		$this->user = new UserModel();
 		$this->verification = new Verification();
 		$this->token = new Token();
+		$this->stamp = new Stamp();
 	}
 
 	public function my_account() {
 		$data['firstTime'] = $this->session->firstTime;
 		$data['username'] = $this->session->user_username;
 		$data['user'] = $this->_get_employee_detail();
+		$data['official_stamps'] = $this->_get_official_stamps();
 		return view('/pages/employee/my-account', $data);
 	}
 
@@ -222,5 +225,14 @@ class EmployeeController extends BaseController
 		return $user;
 	}
 
-
+	private function _get_official_stamps() {
+		$stamps = $this->stamp->findAll();
+		foreach ($stamps as $key => $stamp) {
+			$stamp_users = json_decode($stamp['stamp_users']);
+			if (!in_array($this->session->user_id, $stamp_users)) {
+				unset($stamps[$key]);
+			}
+		}
+		return $stamps;
+	}
 }

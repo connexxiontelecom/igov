@@ -69,6 +69,10 @@ $routes->match(['get', 'post'], 'new-registry', 'GeneralSettingController::new_r
 $routes->match(['get', 'post'], 'manage-registry/(:num)', 'GeneralSettingController::manage_registry/$1', ['filter' => 'auth']);
 
 $routes->match(['get', 'post'], 'notice-board', 'MessagingSettingController::notice_board', ['filter' => 'auth']);
+$routes->match(['get'], 'manage-stamp', 'MessagingSettingController::stamp', ['filter' => 'auth']);
+$routes->match(['get', 'post'], 'new-stamp', 'MessagingSettingController::new_stamp', ['filter' => 'auth']);
+$routes->match(['get', 'post'], 'manage-stamp/(:num)', 'MessagingSettingController::manage_stamp/$1', ['filter' => 'auth']);
+
 
 $routes->match(['get', 'post'], 'new-employee', 'EmployeeSettingController::new_employee', ['filter' => 'auth']);
 $routes->match(['get', 'post'], 'fetch-positions', 'EmployeeSettingController::fetch_positions', ['filter' => 'auth']);

@@ -137,6 +137,21 @@
         </form>
       </div>
     </div>
+	  <?php if (!empty($official_stamps)): ?>
+      <div class="card-box">
+        <h5 class="card-title font-16 mb-3">Official Stamps</h5>
+        <?php foreach ($official_stamps as $stamp): ?>
+          <div class="card mb-0 mt-3 shadow-none border" >
+            <a href="javascript:void(0)" class="text-center">
+              <img src="/uploads/stamps/<?=$stamp['stamp_image']?>" alt="image" class="img-fluid rounded p-1" width="200">
+            </a>
+          </div>
+          <span class="help-block">
+            <small><?=$stamp['stamp_type']?></small>
+          </span>
+        <?php endforeach;?>
+      </div>
+	  <?php endif; ?>
   </div>
   <!-- Standard modal content -->
   <div id="standard-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="standard-modalLabel" aria-hidden="true">
