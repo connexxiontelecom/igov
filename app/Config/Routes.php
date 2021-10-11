@@ -69,6 +69,10 @@ $routes->match(['get', 'post'], 'new-registry', 'GeneralSettingController::new_r
 $routes->match(['get', 'post'], 'manage-registry/(:num)', 'GeneralSettingController::manage_registry/$1', ['filter' => 'auth']);
 
 $routes->match(['get', 'post'], 'notice-board', 'MessagingSettingController::notice_board', ['filter' => 'auth']);
+$routes->match(['get'], 'manage-stamp', 'MessagingSettingController::stamp', ['filter' => 'auth']);
+$routes->match(['get', 'post'], 'new-stamp', 'MessagingSettingController::new_stamp', ['filter' => 'auth']);
+$routes->match(['get', 'post'], 'manage-stamp/(:num)', 'MessagingSettingController::manage_stamp/$1', ['filter' => 'auth']);
+
 
 $routes->match(['get', 'post'], 'new-employee', 'EmployeeSettingController::new_employee', ['filter' => 'auth']);
 $routes->match(['get', 'post'], 'fetch-positions', 'EmployeeSettingController::fetch_positions', ['filter' => 'auth']);
@@ -287,7 +291,7 @@ $routes->match(['get'], 'meetings', 'MeetingController::meetings', ['filter' => 
 $routes->match(['get', 'post'], 'new-meeting', 'MeetingController::new_meeting', ['filter' => 'auth']);
 $routes->addPlaceholder('meetingtoken', '[\s\S]');
 $routes->match(['get'], 'join-meeting/(:num)/(:any)', 'MeetingController::join_meeting/$1/$2', ['filter' => 'auth']);
-
+//
 // Fleet routes
 $routes->match(['get'], 'active-vehicles', 'FleetController::active_vehicles', ['filter' => 'auth']);
 $routes->match(['get', 'post'], 'new-vehicle', 'FleetController::new_vehicle', ['filter' => 'auth']);

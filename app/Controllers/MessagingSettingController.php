@@ -9,6 +9,7 @@ use App\Models\Position;
 use App\Models\Notice;
 use App\Models\Stamp;
 use App\Models\UserModel;
+use App\Models\Employee;
 
 class MessagingSettingController extends BaseController
 {
@@ -167,8 +168,56 @@ class MessagingSettingController extends BaseController
 			$data['firstTime'] = $this->session->firstTime;
 			$data['username'] = $this->session->user_username;
 			$data['department_employees'] = $this->_get_department_employees();
+			$data['stamps'] = $this->stamp->findAll();
 			return view('office/stamp/stamps', $data);
 		endif;
+	}
+
+	public function new_stamp() {
+		if ($this->request->getMethod() == 'get'):
+			$data['firstTime'] = $this->session->firstTime;
+			$data['username'] = $this->session->user_username;
+			$data['department_employees'] = $this->_get_department_employees();
+			return view('office/stamp/new-stamp', $data);
+		endif;
+		if (isset($_POST['stamp_users'])) {
+			$_POST['stamp_users'] = json_encode($_POST['stamp_users']);
+		}
+		$file = $this->request->getFile('file');
+		if (!empty($file)) {
+			if ($file->isValid() && !$file->hasMoved()) {
+				$file_name = $file->getRandomName();
+				$file->move('uploads/stamps', $file_name);
+				$_POST['stamp_image'] = $file_name;
+			}
+		}
+		$this->stamp->save($_POST);
+		session()->setFlashData("action","create successful");
+		return redirect()->to(base_url('/manage-stamp')) ;
+	}
+
+	public function manage_stamp($stamp_id) {
+		if ($this->request->getMethod() == 'get'):
+			$data['firstTime'] = $this->session->firstTime;
+			$data['username'] = $this->session->user_username;
+			$data['stamp'] = $this->_get_stamp($stamp_id);
+			$data['department_employees'] = $this->_get_department_employees();
+			return view('office/stamp/manage-stamp', $data);
+		endif;
+		if (isset($_POST['stamp_users'])) {
+			$_POST['stamp_users'] = json_encode($_POST['stamp_users']);
+		}
+		$file = $this->request->getFile('file');
+		if (!empty($file)) {
+			if ($file->isValid() && !$file->hasMoved()) {
+				$file_name = $file->getRandomName();
+				$file->move('uploads/stamps', $file_name);
+				$_POST['stamp_image'] = $file_name;
+			}
+		}
+		$this->stamp->save($_POST);
+		session()->setFlashData("action","update successful");
+		return redirect()->to(base_url('/manage-stamp')) ;
 	}
 
 	private function _get_department_employees() {
@@ -189,5 +238,11 @@ class MessagingSettingController extends BaseController
 			}
 		}
 		return $department_employees;
+	}
+
+	private function _get_stamp($stamp_id) {
+		$stamp = $this->stamp->find($stamp_id);
+		$stamp['stamp_users'] = json_decode($stamp['stamp_users']);
+		return $stamp;
 	}
 }
