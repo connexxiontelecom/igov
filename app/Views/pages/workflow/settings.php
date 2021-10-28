@@ -128,7 +128,7 @@
                        <div class="row">
                            <div class="col-md-4">
                                <h5>Normal Workflow Process</h5>
-                               <form action="<?= site_url('/workflow/setup-exception-workflow-processor') ?>" method="post">
+                               <form action="<?= site_url('/workflow/setup-workflow-processor') ?>" method="post">
                                    <?= csrf_field() ?>
                                    <div class="form-group">
                                        <label for="">Employee</label>
