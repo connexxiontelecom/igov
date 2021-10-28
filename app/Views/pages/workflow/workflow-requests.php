@@ -50,7 +50,7 @@
                     <?php foreach($my_requests as $request): ?>
                         <tr>
                             <td><?= $serial++ ?></td>
-                            <td><?= date('d M, Y', strtotime($request['created_at']))  ?></td>
+                            <td><?= date('d M, Y', strtotime($request['c_at']))  ?></td>
                             <td class="text-right"><?= number_format($request['amount'],2) ?></td>
                             <td><?= $request['request_title']  ?></td>
                             <td><?= strlen(strip_tags($request['request_description'])) > 35 ? substr(strip_tags($request['request_description']),0,35).'...' : strip_tags($request['request_description'])  ?></td>

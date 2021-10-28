@@ -129,12 +129,14 @@ class WorkflowController extends BaseController
             helper(['form', 'url']);
             $department = $this->request->getPost('department');
             $employee = $this->request->getPost('employee');
+            $to = $this->request->getPost('to');
             $type = $this->request->getPost('workflow_type');
             $data = [
                 'w_flow_ex_added_by' => $this->session->user_id,
                 'w_flow_ex_employee_id'=>$employee,
                 'w_flow_ex_department_id'=>$department,
-                'w_flow_ex_type_id'=>$type
+                'w_flow_ex_type_id'=>$type,
+                'w_flow_ex_to_id'=>$to
             ];
             $this->workflowexceptionprocessor->save($data);
             return redirect()->back()->with("success", "<strong>Success!</strong> Workflow processor set.");
