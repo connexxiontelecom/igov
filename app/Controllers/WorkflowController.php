@@ -231,7 +231,7 @@ class WorkflowController extends BaseController
                     $this->publishResponsiblePersons($exception_list['w_flow_ex_to_id'], $request_id);
                     return redirect()->back()->with("success", "<strong>Success!</strong> Your request was submitted successfully.");
                 }else{
-                    return redirect()->back()->with("error", "<strong>Whoops!</strong> Something went wrong.");
+                    return redirect()->back()->with("error", "<strong>Whoops!</strong> Something went wrong. Ensure workflow setup is properly done for this request.");
                 }
 
                 /*$data = [
