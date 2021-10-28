@@ -224,11 +224,11 @@
                                     </div>
                                 </div>
                                 <div class="col pl-0">
-                                    <a href="/uploads/posts/<?= $attachment->attachment ?>" target="_blank" class="text-muted font-weight-bold"><?= strlen($attachment->attachment) > 30 ? substr($attachment->attachment,0,30).'...' : $attachment->attachment ?></a>
+                                    <a href="/uploads/posts/<?= $attachment['attachment'] ?>" target="_blank" class="text-muted font-weight-bold"><?= strlen($attachment['attachment']) > 30 ? substr($attachment['attachment'],0,30).'...' : $attachment['attachment'] ?></a>
                                 </div>
                                 <div class="col-auto">
                                     <!-- Button -->
-                                    <a href="/uploads/posts/<?= $attachment->attachment ?>" target="_blank" class="btn btn-link btn-lg text-muted">
+                                    <a href="/uploads/posts/<?= $attachment['attachment'] ?>" target="_blank" class="btn btn-link btn-lg text-muted">
                                         <i class="dripicons-download"></i>
                                     </a>
                                 </div>

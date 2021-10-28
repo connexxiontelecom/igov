@@ -50,4 +50,8 @@ class Employee extends Model
     public function getAllEmployeeExceptAuthUser($user){
         return Employee::where('employee_id != '.$user)->findAll();
     }
+
+    public function getUserByDepartmentNEmployeeId($department, $id){
+        return Employee::where('employee_id', $id)->where('employee_department_id', $department)->first();
+    }
 }

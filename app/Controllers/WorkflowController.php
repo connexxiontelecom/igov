@@ -218,20 +218,24 @@ class WorkflowController extends BaseController
                 $user_employee_id = $this->session->user_employee_id;
                 $employee = $this->employee->getEmployeeByUserEmployeeId($user_employee_id);
                 $department = $employee['employee_department_id'];
-                #Exception processors
-                $exception_list = $this->workflowexceptionprocessor->checkExceptionList($user_employee_id, $workflow_type);
-                #Normal
-                $normal_list = $this->workflowprocessor->checkNormalList($user_employee_id, $workflow_type, $department);
-                if(!empty($exception_list)){
-                    $request_id = $this->postRequest();
-                    $this->publishResponsiblePersons($exception_list['w_flow_ex_to_id'], $request_id);
-                    return redirect()->back()->with("success", "<strong>Success!</strong> Your request was submitted successfully.");
-                }elseif(!empty($normal_list)){
-                    $request_id = $this->postRequest();
-                    $this->publishResponsiblePersons($exception_list['w_flow_ex_to_id'], $request_id);
-                    return redirect()->back()->with("success", "<strong>Success!</strong> Your request was submitted successfully.");
+                if(!empty($department)){
+                    #Exception processors
+                    $exception_list = $this->workflowexceptionprocessor->checkExceptionList($user_employee_id, $workflow_type);
+                    #Normal
+                    $normal_list = $this->workflowprocessor->checkNormalList($user_employee_id, $workflow_type, $department);
+                    if(!empty($exception_list)){
+                        $request_id = $this->postRequest();
+                        $this->publishResponsiblePersons($exception_list['w_flow_ex_to_id'], $request_id);
+                        return redirect()->back()->with("success", "<strong>Success!</strong> Your request was submitted successfully.");
+                    }elseif(!empty($normal_list)){
+                        $request_id = $this->postRequest();
+                        $this->publishResponsiblePersons($exception_list['w_flow_ex_to_id'], $request_id);
+                        return redirect()->back()->with("success", "<strong>Success!</strong> Your request was submitted successfully.");
+                    }else{
+                        return redirect()->back()->with("error", "<strong>Whoops!</strong> Something went wrong. Ensure workflow setup is properly done for this request.");
+                    }
                 }else{
-                    return redirect()->back()->with("error", "<strong>Whoops!</strong> Something went wrong.");
+                    return redirect()->back()->with("error", "<strong>Whoops!</strong> You've not been assigned to a department. Kindly do that.");
                 }
 
                 /*$data = [
