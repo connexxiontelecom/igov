@@ -222,14 +222,14 @@ class WorkflowController extends BaseController
                     #Exception processors
                     $exception_list = $this->workflowexceptionprocessor->checkExceptionList($user_employee_id, $workflow_type);
                     #Normal
-                    $normal_list = $this->workflowprocessor->checkNormalList($user_employee_id, $workflow_type, $department);
+                    $normal_list = $this->workflowprocessor->checkNormalList($workflow_type, $department);
                     if(!empty($exception_list)){
                         $request_id = $this->postRequest();
                         $this->publishResponsiblePersons($exception_list['w_flow_ex_to_id'], $request_id);
                         return redirect()->back()->with("success", "<strong>Success!</strong> Your request was submitted successfully.");
                     }elseif(!empty($normal_list)){
                         $request_id = $this->postRequest();
-                        $this->publishResponsiblePersons($exception_list['w_flow_ex_to_id'], $request_id);
+                        $this->publishResponsiblePersons($normal_list['w_flow_employee_id'], $request_id);
                         return redirect()->back()->with("success", "<strong>Success!</strong> Your request was submitted successfully.");
                     }else{
                         return redirect()->back()->with("error", "<strong>Whoops!</strong> Something went wrong. Ensure workflow setup is properly done for this request.");
