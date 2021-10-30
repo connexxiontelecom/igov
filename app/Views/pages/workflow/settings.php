@@ -302,8 +302,8 @@
                                                 <td><?= $ex_processor['w_flow_ex_to_id'] ?></td>
                                                 <td><?= $ex_processor['workflow_type_name'] ?></td>
                                                 <td>
-                                                    <a href="javascript:void(0);" data-toggle="modal" data-target="#processorModal_<?= $ex_processor['workflow_ex_processor_id'] ?>" class="btn btn-sm btn-warning text-white">Edit</a>
-                                                    <div id="processorModal_<?= $ex_processor['workflow_ex_processor_id'] ?>" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="multiple-oneModalLabel" aria-hidden="true">
+                                                    <a href="javascript:void(0);" data-toggle="modal" data-target="#processorModal2_<?= $ex_processor['workflow_ex_processor_id'] ?>" class="btn btn-sm btn-warning text-white">Edit</a>
+                                                    <div id="processorModal2_<?= $ex_processor['workflow_ex_processor_id'] ?>" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="multiple-oneModalLabel" aria-hidden="true">
                                                         <div class="modal-dialog">
                                                             <div class="modal-content">
                                                                 <div class="modal-header">
