@@ -102,7 +102,29 @@
               </div>
             </div>
             <div class="row">
-              <div class="col-12">
+              <div class="col-lg-6">
+                <div class="form-group">
+                  <label for="reviewed-by">Reviewed By</label><span style="color: red"> *</span>
+                  <select class="form-control" id="reviewed-by" name="p_reviewed_by" data-toggle="select2" required>
+                    <option value="">Select user</option>
+				            <?php foreach ($department_employees as $department => $employees): ?>
+					            <?php if(!empty($employees)):?>
+                        <optgroup label="<?=$department?>">
+							            <?php foreach ($employees as $employee):?>
+                            <option value="<?=$employee['user']['user_id']?>">
+									            <?=$employee['position']['pos_name'].' ('.$employee['user']['user_name'].')'?>
+                            </option>
+							            <?php endforeach;?>
+                        </optgroup>
+					            <?php endif;?>
+				            <?php endforeach; ?>
+                  </select>
+                  <div class="invalid-feedback">
+                    Please select the reviewer.
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6">
                 <div class="form-group">
                   <label for="signed-by">Signed By</label><span style="color: red"> *</span>
                   <select class="form-control" id="signed-by" name="p_signed_by" data-toggle="select2" required>

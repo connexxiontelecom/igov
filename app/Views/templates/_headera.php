@@ -23,7 +23,10 @@
 	
 	<link href="/assetsa/libs/mohithg-switchery/switchery.min.css" rel="stylesheet" type="text/css" />
 	<link href="/assetsa/libs/multiselect/css/multi-select.css" rel="stylesheet" type="text/css" />
+
+    <link href="/assetsa/libs/dropzone/min/dropzone.min.css" rel="stylesheet" type="text/css" />
 	<link href="/assetsa/libs/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
+
 	<link href="/assetsa/libs/selectize/css/selectize.bootstrap3.css" rel="stylesheet" type="text/css" />
 	<link href="/assetsa/libs/bootstrap-select/css/bootstrap-select.min.css" rel="stylesheet" type="text/css" />
 	<link href="/assetsa/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.css" rel="stylesheet" type="text/css" />

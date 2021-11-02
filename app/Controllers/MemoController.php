@@ -47,6 +47,7 @@ class MemoController extends PostController
 			'p_status' => 0,
 			'p_by' => $this->session->user_id,
 			'p_signed_by' => $post_data['p_signed_by'],
+			'p_reviewed_by' => $post_data['p_reviewed_by'],
 			'p_direction' => 1,
 			'p_recipients_id' => json_encode($post_data['positions'])
 		];
@@ -58,6 +59,7 @@ class MemoController extends PostController
 			}
 			$this->send_notification('New Internal Memo Created', 'You created a new internal memo', $this->session->user_id, site_url('view-memo/').$post_id, 'click to view memo');
 			$this->send_notification('New Internal Memo Created', 'An internal memo was created. You are the signatory.', $post_data['p_signed_by'], site_url('view-memo/').$post_id, 'click to view memo');
+			$this->send_notification('New Internal Memo Created', 'An internal memo was created. You are the reviewer.', $post_data['p_reviewed_by'], site_url('view-memo/').$post_id, 'click to view memo');
 			$response['success'] = true;
 			$response['message'] = 'Successfully created the internal memo';
 		} else {
@@ -116,6 +118,7 @@ class MemoController extends PostController
 		$data['firstTime'] = $this->session->firstTime;
 		$data['username'] = $this->session->user_username;
 		$data['memo'] = $this->_get_memo($memo_id);
+		$data['stamps'] = $this->_get_official_stamps();
 		return view('/pages/posts/memos/view-memo', $data);
 	}
 
@@ -195,6 +198,30 @@ class MemoController extends PostController
 			  $external_recipients = explode("\n", $memo['p_recipients_id']);
 			  $memos[$key]['external_recipients'] = $external_recipients;
       }
+			$memos[$key]['written_by'] = $this->user->find($memo['p_by']);
+			$memos[$key]['recipients'] = $recipients;
+		}
+		return $memos;
+	}
+
+	private function _get_unreviewed_memos() {
+		$memos = $this->post
+			->where('p_reviewed_by', $this->session->user_id)
+			->where('p_type', 1)
+			->where('p_status', 0)
+			->orderBy('p_date', 'DESC')
+			->findAll();
+		foreach ($memos as $key => $memo) {
+			$recipient_ids = json_decode($memo['p_recipients_id']);
+			$recipients = [];
+			if ($recipient_ids) {
+				foreach ($recipient_ids as $recipient_id) {
+					array_push($recipients, $this->position->find($recipient_id));
+				}
+			} else {
+				$external_recipients = explode("\n", $memo['p_recipients_id']);
+				$memos[$key]['external_recipients'] = $external_recipients;
+			}
 			$memos[$key]['written_by'] = $this->user->find($memo['p_by']);
 			$memos[$key]['recipients'] = $recipients;
 		}
@@ -294,5 +321,16 @@ class MemoController extends PostController
 			}
 		}
 		return $department_employees;
+	}
+
+	private function _get_official_stamps() {
+		$stamps = $this->stamp->findAll();
+		foreach ($stamps as $key => $stamp) {
+			$stamp_users = json_decode($stamp['stamp_users']);
+			if (!in_array($this->session->user_id, $stamp_users)) {
+				unset($stamps[$key]);
+			}
+		}
+		return $stamps;
 	}
 }

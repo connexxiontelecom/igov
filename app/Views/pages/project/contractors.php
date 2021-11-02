@@ -1,4 +1,4 @@
-<?= $this->extend('layouts/admin'); ?>
+<?= $this->extend('layouts/master'); ?>
 <?= $this->section('content'); ?>
 <div class="container-fluid">
     <!-- start page title -->
@@ -43,6 +43,7 @@
                             <th>Email</th>
                             <th>Mobile No.</th>
                             <th>Website</th>
+                            <th>Status</th>
                             <th class="text-center" style="width: 10%">Actions</th>
                         </tr>
 
@@ -56,11 +57,12 @@
                                 <td><?= $contractor['contractor_email'] ?></td>
                                 <td><?= $contractor['contractor_mobile_no'] ?></td>
                                 <td><?= $contractor['contractor_website'] ?></td>
+                                <td><?= $contractor['contractor_status'] == 1 ? 'Active' : 'Blacklisted' ?></td>
                                 <td>
                                     <div class="btn-group dropdown">
                                         <a href="javascript: void(0);" class="table-action-btn dropdown-toggle arrow-none btn btn-light btn-sm" data-toggle="dropdown" aria-expanded="false"><i class="mdi mdi-dots-horizontal"></i></a>
                                         <div class="dropdown-menu dropdown-menu-right">
-                                            <a class="dropdown-item" href="javascript:void(0);"><i class="mdi mdi-check-all mr-2 text-muted font-18 vertical-middle"></i>View Contractor</a>
+                                            <a class="dropdown-item" href="<?= route_to('contractor-detail', $contractor['contractor_id']) ?>"><i class="mdi mdi-check-all mr-2 text-muted font-18 vertical-middle"></i>View Contractor</a>
                                         </div>
                                     </div>
                                 </td>

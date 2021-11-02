@@ -712,21 +712,31 @@
                                 <li>
                                     <a href="<?= route_to('manage-projects') ?>">Manage Projects</a>
                                 </li>
-
-                                <li>
-                                    <a href="<?=route_to('manage-contractors'); ?>">Contractors</a>
-                                </li>
-
-
                             </ul>
                         </div>
                     </li>
-
                     <li>
                         <a href="<?= site_url('g-drive') ?>">
                             <i data-feather="folder-plus"></i>
                             <span> GDrive </span>
                         </a>
+                    </li>
+                    <li>
+                        <a href="#procurementMenu" data-toggle="collapse">
+                            <i data-feather="grid"></i>
+                            <span> Procurement </span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <div class="collapse" id="procurementMenu">
+                            <ul class="nav-second-level">
+                                <li>
+                                    <a href="<?= route_to('contract-categories'); ?>">Contract Category</a>
+                                </li>
+                                <li>
+                                    <a href="<?=route_to('contractor-license-category'); ?>">License Category</a>
+                                </li>
+                            </ul>
+                        </div>
                     </li>
 					
 					

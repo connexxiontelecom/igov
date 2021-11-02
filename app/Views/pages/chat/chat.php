@@ -152,8 +152,22 @@
 <?= $this->endSection(); ?>
 <?= $this->section('extra-scripts'); ?>
 <script src="/assets/js/axios.min.js"></script>
+<!--<script type="text/javascript" src="//cdn.ably.io/lib/ably.min-1.js"></script>-->
+<script type="text/javascript" src="/assets/js/ably.min.js"></script>
 <script>
     $(document).ready(function(){
+        var ably = new Ably.Realtime('aht0IA.nknxWw:BjDaL6hWD5Pc929a');
+        var channel = ably.channels.get('chatchannel');
+        var auth_user = "<?= $emp['employee_id'] ?>";
+        ably.connection.once('connected',function(){
+            //alert('connected');
+        });
+
+        channel.subscribe('helloevent', function(message) {
+            alert("new msg recieved");
+            alert(message.data);
+        });
+
         $(".employee-wrapper").on('click',function(e) {
             e.preventDefault();
             var user = $(this).data('emp');
@@ -165,35 +179,78 @@
                 })
                .then(response=>{
                    $('#chatWrapper').html(response.data);
-                   //console.log('Hello');
                })
                 .catch(error=>{
-                    console.log(error);
+                    //console.log(error);
                 });
             }
-
-            //$(this).off('click');
         });
         $(document).on('click', '.chat-send', function(e){
             e.preventDefault();
             var message = $('.chat-message').val();
             var user = $('#hidden-selected').val();
-            axios.post('/send-message', {message:message, user:user})
+            var payload = {"msg":message, "receiver":$(this).data('name')};
+            channel.publish ('helloevent', payload,function(err){
+                if(err){
+                    alert('Oops! Something went wrong.');
+                }else{
+                    if(payload.receiver == auth_user){
+                        alert('You have a new message');
+                    }
+                    saveMessage(payload);
+                }
+            });
+
+            /*axios.post('/send-message', {message:message, user:user})
             .then(response=>{
+                $('.chat-message').val('');
                 $('#chatWrapper').html(response.data);
+                // Subscribe to messages on channel
+                channel.subscribe('helloevent', function(message) {
+                    alert(message.data);
+                });
+
             })
             .catch(error=>{
                 console.log('error');
-            });
+            });*/
         });
     });
 
     function getConversations(user_id){
+
         axios.post('/chat-messages', {user:user_id})
             .then(response=>{
                 $('.selected-user').text($(this).data('name'));
                 $('#hidden-selected').val($(this).data('emp'));
                 $('#chatWrapper').html(response.data);
+            });
+    }
+
+    function loadChatMessages(user_id){
+        $.ajax({
+            url:"<?= base_url(); ?>/chat-messages",
+            method:"POST",
+            data:{user:user_id},
+            dataType:"json",
+            success:function(data){
+                var html = '';
+            }
+        });
+    }
+    function saveMessage(payload){
+        axios.post('/send-message', {message:payload.msg, user:payload.receiver})
+            .then(response=>{
+                $('.chat-message').val('');
+                $('#chatWrapper').html(response.data);
+                // Subscribe to messages on channel
+                channel.subscribe('helloevent', function(message) {
+                    alert(message.data);
+                });
+
+            })
+            .catch(error=>{
+                console.log('error');
             });
     }
 </script>

@@ -1,4 +1,4 @@
-<?= $this->extend('layouts/admin'); ?>
+<?= $this->extend('layouts/master'); ?>
 
 <?= $this->section('extra-styles') ?>
 <link href="/assets/libs/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
@@ -113,6 +113,31 @@
                                     <?php endif; ?>
                                 </div>
                             </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="">Attachment</label>
+                                    <input type="file" name="attachments[]" class="form-control-file" multiple>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="">Contractor License Category</label>
+                                    <select name="contractor_license" id="contractor_license" class="form-control">
+                                        <option selected disabled>--Select contractor license--</option>
+                                        <?php foreach($licenses as $license): ?>
+                                            <option value="<?= $license['contractor_license_category_id'] ?>"><?= $license['category_name'] ?> </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                    <?php if ($validation->getError('contractor_license')): ?>
+                                        <div class="text-danger">
+                                            <?= $validation->getError('contractor_license') ?>
+                                        </div>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+
                         </div>
                         <div class="row">
                             <div class="col-md-12 d-flex justify-content-center">
