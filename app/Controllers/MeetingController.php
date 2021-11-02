@@ -179,7 +179,8 @@ class MeetingController extends BaseController
 						$employee_ids = $_POST['meeting_employees'];
 						foreach($employee_ids as $employee_id) {
 							$user = $this->user->where('user_employee_id', $employee_id)->find();
-							$this->send_notification('New Meeting Created', 'You were selected as a participant in a new meeting', $user['user_id'], site_url('/join-meeting/').$meeting_id.'/'.$token, 'click to join meeting');
+							if ($user)
+								$this->send_notification('New Meeting Created', 'You were selected as a participant in a new meeting', $user['user_id'], site_url('/join-meeting/').$meeting_id.'/'.$token, 'click to join meeting');
 						}
 						$response['success'] = true;
 						$response['message'] = 'Successfully scheduled a meeting';
