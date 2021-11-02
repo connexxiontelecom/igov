@@ -10,6 +10,7 @@ use App\Models\Organization;
 use App\Models\Position;
 use App\Models\Post;
 use App\Models\PostAttachment;
+use App\Models\Stamp;
 use App\Models\Token;
 use App\Models\UserModel;
 use App\Models\Verification;
@@ -32,6 +33,7 @@ class PostController extends BaseController
 		$this->organization = new Organization();
 		$this->verification = new Verification();
 		$this->token = new Token();
+		$this->stamp = new Stamp();
 	}
 
 	public function upload_post_attachments(){

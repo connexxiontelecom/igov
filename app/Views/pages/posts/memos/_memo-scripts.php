@@ -5,9 +5,10 @@
 			e.preventDefault()
       let subject = $('#subject').val()
       let signedBy = $('#signed-by').val()
+      let reviewedBy = $('#reviewed-by').val()
       let refNo = $('#ref-no').val()
       let positions = $('#positions').val()
-      if (!subject || !signedBy || !refNo || !positions || quillEditor.root.innerText.length < 2) {
+      if (!subject || !reviewedBy || !signedBy || !refNo || !positions || quillEditor.root.innerText.length < 2) {
         Swal.fire('Invalid Submission!', 'Please fill in all required fields', 'error')
       } else {
         let body = quillEditor.root.innerHTML
