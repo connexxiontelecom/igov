@@ -231,6 +231,10 @@
                                     <a href="/uploads/posts/<?= $attachment['attachment'] ?>" target="_blank" class="btn btn-link btn-lg text-muted">
                                         <i class="dripicons-download"></i>
                                     </a>
+	
+									<button onclick="embedImages('<?='/uploads/posts/'.$attachment['attachment']; ?>',  '<?='/uploads/signatures/'.$employee_signature; ?>')" class="btn btn-link btn-lg text-muted">
+										Sign Document
+									</button>
                                 </div>
                             </div>
                         </div>
@@ -244,7 +248,133 @@
 </div>
 <?= $this->endSection(); ?>
 <?= $this->section('extra-scripts'); ?>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.js"></script>
+<script src="https://unpkg.com/pdf-lib@1.4.0"></script>
+<script src="https://unpkg.com/downloadjs@1.4.7"></script>
+<!--<script src="main.js"></script>-->
 <script>
+    const { PDFDocument, StandardFonts, rgb, degrees } = PDFLib
+
+
+    async function embedImages(url, sign) {
+
+
+        const jpgUrls = sign;
+        const jpgImageBytess = await fetch(jpgUrls).then((res) => res.arrayBuffer())
+
+        // Create a new PDFDocument
+        const existingPdfBytes = await fetch(url).then(res => res.arrayBuffer())
+
+        // Load a PDFDocument from the existing PDF bytes
+        const pdfDoc = await PDFDocument.load(existingPdfBytes)
+
+        const jpgImages = await pdfDoc.embedJpg(jpgImageBytess)
+       
+
+        const pages = pdfDoc.getPages()
+        const firstPage = pages[0]
+
+        const jpgDimss = jpgImages.scale(0.5)
+
+                firstPage.drawImage(jpgImages, {
+            x: firstPage.getWidth() - 150,
+            y: firstPage.getHeight() /10 + 80,
+            width: jpgDimss.width,
+            height: jpgDimss.height,
+        })
+
+     
+
+        //const pdfBytes = await pdfDoc.save()
+		const pdfBytes = await pdfDoc.saveAsBase64({ dataUri: true })
+        let fileName = /[^/]*$/.exec(url)[0];
+		
+        urltoFile(pdfBytes, fileName)
+            .then(function(file){
+                console.log(file);
+                let formdata = new FormData();
+                formdata.append("file",file);
+
+                $.ajax({
+                    url: '<?=site_url('/workflow-requests/upload-sign') ?>',
+                    type: 'post',
+                    data: formdata,
+                    contentType: false,
+                    processData: false,
+                    
+                    success: function(php_script_response){
+                        console.log(php_script_response);
+                
+                
+                    }
+                });
+            })
+
+    
+    }
+
+   async function urltoFile(url, filename, mimeType){
+        mimeType = mimeType || (url.match(/^data:([^;]+);/)||'')[1];
+        return (fetch(url)
+                .then(function(res){return res.arrayBuffer();})
+                .then(function(buf){return new File([buf], filename, {type:mimeType});})
+        );
+    }
+
+    async function post(pdfBytes, url){
+
+    
+        
+        
+	}
+
+
+
+
+   //  async function embedImages(url, sign) {
+   //
+   // alert(url+'   '+sign);
+   //  }
+
+
+
+
+    async function modifyPdf(url) {
+        //const url = 'https://pdf-lib.js.org/assets/with_update_sections.pdf'
+        const existingPdfBytes = await fetch(url).then(res => res.arrayBuffer())
+
+        // Load a PDFDocument from the existing PDF bytes
+        const pdfDoc = await PDFDocument.load(existingPdfBytes)
+
+        // Embed the Helvetica font
+        const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica)
+
+        // Get the first page of the document
+        const pages = pdfDoc.getPages()
+        const firstPage = pages[0]
+
+        // Get the width and height of the first page
+        const { width, height } = firstPage.getSize()
+
+        // Draw a string of text diagonally across the first page
+        firstPage.drawText('This text was added with JavaScript!', {
+            x: 5,
+            y: height / 2 + 300,
+            size: 50,
+            font: helveticaFont,
+            color: rgb(0.95, 0.1, 0.1),
+            rotate: degrees(-45),
+        })
+
+        // Serialize the PDFDocument to bytes (a Uint8Array)
+        const pdfBytes = await pdfDoc.save()
+
+        // Trigger the browser to download the PDF document
+        download(pdfBytes, url, "application/pdf");
+    }
+
+
     $(document).ready(function(){
         var quill = new Quill ();
         $("#training-form").on("submit",function(){

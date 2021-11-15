@@ -169,6 +169,7 @@ $routes->post('/workflow-requests/new-request', 'WorkflowController::setNewWorkf
 $routes->get('/workflow-requests/view/(:num)', 'WorkflowController::viewWorkflowRequest/$1', ['filter'=>'auth']);
 $routes->post('/workflow-requests/process-request', 'WorkflowController::processWorkflowRequest', ['filter'=>'auth']);
 $routes->post('/workflow-requests/leave-comment', 'WorkflowController::leaveComment', ['filter'=>'auth']);
+$routes->post('/workflow-requests/upload-sign', 'WorkflowController::uploadSign', ['filter'=>'auth']);
 //$routes->get('notice-board/(:any)', 'MessagingSettingController::notice_board/$1', ['filter' => 'auth']);
 
 
