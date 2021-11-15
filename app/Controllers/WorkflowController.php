@@ -470,47 +470,7 @@ class WorkflowController extends BaseController
 	    unlink($file_path);
 	    $file->move('uploads/posts/', $file_name);
 	    echo $file_name;
-	
-//	    $filename = $_FILES['file']['name'];
-//
-//	    /* Choose where to save the uploaded file */
-//	    $location = "/uploads/posts/".$filename;
-//
-//	    /* Save the uploaded file to the local filesystem */
-//	    if ( move_uploaded_file($_FILES['file']['tmp_name'], $location) ) {
-//		    echo $filename;
-//	    } else {
-//		    echo 'Failure';
-//	    }
-    	
-    	
-    	
-//	    public function uploadFileFromBlobString($base64string = '', $file_name = '', $folder = '')
-//	    {
-		
-//
-//	    $base64string = $_POST['pdfBytes'];
-//	    $file_name = $_POST['url'];
-//		    $result = 0;
-//
-//		    // Convert blob (base64 string) back to PDF
-//		    if (!empty($base64string)) {
-//
-//			    // Detects if there is base64 encoding header in the string.
-//			    // If so, it needs to be removed prior to saving the content to a phisical file.
-//			    if (strpos($base64string, ',') !== false) {
-//				    @list($encode, $base64string) = explode(',', $base64string);
-//			    }
-//
-//			    $base64data = base64_decode($base64string, true);
-//			    //$file_path  = "{$folder}/{$file_name}";
-//			    $file_path = "/uploads/posts/{$file_name}";
-//			    // Return the number of bytes saved, or false on failure
-//			    //$result = file_put_contents("{$this->_assets_path}/{$file_path}", $base64data);
-//			    $result = file_put_contents("{$file_path}", $base64data);
-//		    }
-//
-//		    return json_encode($result);
+
 	    } // uploadFileFromBlobString
 	
 //    }
