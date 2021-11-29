@@ -333,6 +333,7 @@ class WorkflowController extends BaseController
 	        $user_employee_id = $this->session->user_employee_id;
 	        $employee = $this->employee->getEmployeeByUserEmployeeId($user_employee_id);
 	        $data['employee_signature'] = $employee['employee_signature'];
+	        $data['employee_name'] = $employee['employee_f_name']." ".$employee['employee_l_name'];
             return view('pages/workflow/view-workflow-request', $data);
         }else{
             return redirect()->back()->with("error", "<strong>Whoops!</strong> No record found.");

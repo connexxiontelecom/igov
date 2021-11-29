@@ -232,9 +232,64 @@
                                         <i class="dripicons-download"></i>
                                     </a>
 	
-									<button onclick="embedImages('<?='/uploads/posts/'.$attachment['attachment']; ?>',  '<?='/uploads/signatures/'.$employee_signature; ?>')" class="btn btn-link btn-lg text-muted">
-										Sign Document
-									</button>
+									
+									
+	
+									<button type="button" class="btn btn-link btn-lg text-muted" data-toggle="modal" data-target="#standard-modal"><i class="dripicons-pencil"> </i></button>
+	
+	
+									<!-- Standard modal content -->
+									<div id="standard-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="standard-modalLabel" aria-hidden="true">
+										<div class="modal-dialog">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h4 class="modal-title" id="standard-modalLabel">Sign Document </h4>
+													<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+												</div>
+												<div class="modal-body">
+													<h6>Text in a modal</h6>
+													<div class="form-group mb-3">
+														<label>Colour:</label>
+														<div id="component-colorpicker" class="input-group" title="Using format option">
+															<input id="pen-color" type="text" class="form-control input-lg" value="#305AA2"/>
+															<span class="input-group-append">
+                                                <span class="input-group-text colorpicker-input-addon"><i></i></span>
+                                            </span>
+														</div>
+													</div>
+													<hr>
+													<input type="hidden" value="<?=$employee_name ?>" id="employee-name">
+													<div class="form-group mb-3">
+														<label for="simpleinput">Comment</label>
+														<textarea  class="form-control" id="comment" rows="5"></textarea>
+													</div>
+													
+													<div class="form-group mb-3">
+														<label for="example-select">Position</label>
+														<select class="form-control" id="position">
+															<option value="0">Select Position</option>
+															<option value="1">Top Left</option>
+															<option value="2"> Top Center </option>
+															<option value="3"> Top Right </option>
+															<option value="4"> Center Left </option>
+															<option value="5"> Center Center </option>
+															<option value="6"> Center Right </option>
+															<option value="7">Bottom Left</option>
+															<option value="8"> Bottom Center </option>
+															<option value="9"> Bottom Right </option>
+															
+														</select>
+													</div>
+												
+																		</div>
+												<div class="modal-footer">
+													<button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+												
+													<button type="button" onclick="embedImages('<?='/uploads/posts/'.$attachment['attachment']; ?>',  '<?='/uploads/signatures/'.$employee_signature; ?>')" class="btn btn-primary">Save changes</button>
+												</div>
+											</div><!-- /.modal-content -->
+										</div><!-- /.modal-dialog -->
+									</div><!-- /.modal -->
                                 </div>
                             </div>
                         </div>
@@ -259,23 +314,234 @@
 
     async function embedImages(url, sign) {
 
+		let color =$('#pen-color').val();
+        let comment = $('#comment').val();
+        let position = $('#position').val();
+        let name = $('#employee-name').val();
+        let note = `${comment} - ${name}`;
+        color = color.replace('rgb(', '' )
+        color = color.replace(')', '' )
+      color = color.split(",").filter(x => x.trim().length && !isNaN(x)).map(Number);
+        color[0] = color[0]/255;
+        color[1] = color[1]/255;
+        color[2] = color[2]/255;
+        console.log(color);
 
-        const jpgUrls = sign;
-        const jpgImageBytess = await fetch(jpgUrls).then((res) => res.arrayBuffer())
+        if(position == '0'){
+            alert('Please Select a Position')
+		} else{
+            const jpgUrls = sign;
+            const jpgImageBytess = await fetch(jpgUrls).then((res) => res.arrayBuffer())
 
-        // Create a new PDFDocument
-        const existingPdfBytes = await fetch(url).then(res => res.arrayBuffer())
+            // Create a new PDFDocument
+            const existingPdfBytes = await fetch(url).then(res => res.arrayBuffer())
 
-        // Load a PDFDocument from the existing PDF bytes
-        const pdfDoc = await PDFDocument.load(existingPdfBytes)
+            // Load a PDFDocument from the existing PDF bytes
+            const pdfDoc = await PDFDocument.load(existingPdfBytes)
 
-        const jpgImages = await pdfDoc.embedJpg(jpgImageBytess)
-       
+            const jpgImages = await pdfDoc.embedJpg(jpgImageBytess)
 
-        const pages = pdfDoc.getPages()
-        const firstPage = pages[0]
 
-        const jpgDimss = jpgImages.scale(0.5)
+            const pages = pdfDoc.getPages()
+            const firstPage = pages[0]
+
+            const jpgDimss = jpgImages.scale(0.5)
+            const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica)
+            switch (position) {
+                case '1':
+					console.log('top left');
+                    firstPage.drawImage(jpgImages, {
+                        x: firstPage.getWidth() - 500,
+                        y: firstPage.getHeight()/10 + 620,
+                        width: jpgDimss.width,
+                        height: jpgDimss.height,
+                    })
+
+                    firstPage.drawText(note, {
+                        x: firstPage.getWidth() - 500,
+                        y: firstPage.getHeight()/10 + 600,
+                        size: 12,
+                        font: helveticaFont,
+                        color: rgb(color[0], color[1], color[2]),
+                    })
+                    break;
+                case '2':
+                    firstPage.drawImage(jpgImages, {
+                        x: firstPage.getWidth() - 300,
+                        y: firstPage.getHeight()/10 + 620,
+                        width: jpgDimss.width,
+                        height: jpgDimss.height,
+                    })
+
+                    firstPage.drawText(note, {
+                        x: firstPage.getWidth() - 300,
+                        y: firstPage.getHeight()/10 + 600,
+                        size: 12,
+                        font: helveticaFont,
+                        color: rgb(color[0], color[1], color[2]),
+                    })
+                    break;
+                case '3':
+                    firstPage.drawImage(jpgImages, {
+                        x: firstPage.getWidth() - 150,
+                        y: firstPage.getHeight()/10 + 620,
+                        width: jpgDimss.width,
+                        height: jpgDimss.height,
+                    })
+
+                    firstPage.drawText(note, {
+                        x: firstPage.getWidth() - 150,
+                        y: firstPage.getHeight()/10 + 600,
+                        size: 12,
+                        font: helveticaFont,
+                        color: rgb(color[0], color[1], color[2]),
+                    })
+                    break;
+                case '4':
+                    firstPage.drawImage(jpgImages, {
+                        x: firstPage.getWidth() - 500,
+                        y: firstPage.getHeight()/10 + 500,
+                        width: jpgDimss.width,
+                        height: jpgDimss.height,
+                    })
+
+                    firstPage.drawText(note, {
+                        x: firstPage.getWidth() - 500,
+                        y: firstPage.getHeight()/10 + 450,
+                        size: 12,
+                        font: helveticaFont,
+                        color: rgb(color[0], color[1], color[2]),
+                    })
+                    break;
+                case '5':
+                    firstPage.drawImage(jpgImages, {
+                        x: firstPage.getWidth() - 300,
+                        y: firstPage.getHeight()/10 + 500,
+                        width: jpgDimss.width,
+                        height: jpgDimss.height,
+                    })
+
+                    firstPage.drawText(note, {
+                        x: firstPage.getWidth() - 300,
+                        y: firstPage.getHeight()/10 + 450,
+                        size: 12,
+                        font: helveticaFont,
+                        color: rgb(color[0], color[1], color[2]),
+                    })
+                    break;
+                case '6':
+                    firstPage.drawImage(jpgImages, {
+                        x: firstPage.getWidth() - 150,
+                        y: firstPage.getHeight()/10 + 500,
+                        width: jpgDimss.width,
+                        height: jpgDimss.height,
+                    })
+
+                    firstPage.drawText(note, {
+                        x: firstPage.getWidth() - 150,
+                        y: firstPage.getHeight()/10 + 450,
+                        size: 12,
+                        font: helveticaFont,
+                        color: rgb(color[0], color[1], color[2]),
+                    })
+                    break;
+                case '7':
+
+                    firstPage.drawImage(jpgImages, {
+                        x: firstPage.getWidth() - 500,
+                        y: firstPage.getHeight()/10 + 500,
+                        width: jpgDimss.width,
+                        height: jpgDimss.height,
+                    })
+
+                    firstPage.drawText(note, {
+                        x: firstPage.getWidth() - 500,
+                        y: firstPage.getHeight()/10 + 450,
+                        size: 12,
+                        font: helveticaFont,
+                        color: rgb(color[0], color[1], color[2]),
+                    })
+
+                    break;
+                case '8':
+                    firstPage.drawImage(jpgImages, {
+                        x: firstPage.getWidth() - 300,
+                        y: firstPage.getHeight()/10 + 80,
+                        width: jpgDimss.width,
+                        height: jpgDimss.height,
+                    })
+
+                    firstPage.drawText(note, {
+                        x: firstPage.getWidth() - 300,
+                        y: firstPage.getHeight()/10 + 70,
+                        size: 12,
+                        font: helveticaFont,
+                        color: rgb(color[0], color[1], color[2]),
+                    })
+
+                    break;
+
+                case '9':
+                    firstPage.drawImage(jpgImages, {
+                        x: firstPage.getWidth() - 150,
+                        y: firstPage.getHeight()/10 + 80,
+                        width: jpgDimss.width,
+                        height: jpgDimss.height,
+                    })
+
+                    firstPage.drawText(note, {
+                        x: firstPage.getWidth() - 150,
+                        y: firstPage.getHeight()/10 + 70,
+                        size: 12,
+                        font: helveticaFont,
+                        color: rgb(color[0], color[1], color[2]),
+                    })
+                    break;
+            }
+
+            //const pdfBytes = await pdfDoc.save()
+            const pdfBytes = await pdfDoc.saveAsBase64({ dataUri: true })
+            let fileName = /[^/]*$/.exec(url)[0];
+
+            urltoFile(pdfBytes, fileName)
+                .then(function(file){
+                    console.log(file);
+                    let formdata = new FormData();
+                    formdata.append("file",file);
+
+                    $.ajax({
+                        url: '<?=site_url('/workflow-requests/upload-sign') ?>',
+                        type: 'post',
+                        data: formdata,
+                        contentType: false,
+                        processData: false,
+
+                        success: function(php_script_response){
+                            console.log(php_script_response);
+                            alert('Document SIgned');
+
+
+                        }
+                    });
+                })
+		}
+
+    
+    
+
+
+    }
+    async function urltoFile(url, filename, mimeType){
+        mimeType = mimeType || (url.match(/^data:([^;]+);/)||'')[1];
+        return (fetch(url)
+                .then(function(res){return res.arrayBuffer();})
+                .then(function(buf){return new File([buf], filename, {type:mimeType});})
+        );
+    }
+    
+    async function ebedImages(url, sign) {
+
+
 
                 firstPage.drawImage(jpgImages, {
             x: firstPage.getWidth() - 150,
@@ -286,41 +552,12 @@
 
      
 
-        //const pdfBytes = await pdfDoc.save()
-		const pdfBytes = await pdfDoc.saveAsBase64({ dataUri: true })
-        let fileName = /[^/]*$/.exec(url)[0];
-		
-        urltoFile(pdfBytes, fileName)
-            .then(function(file){
-                console.log(file);
-                let formdata = new FormData();
-                formdata.append("file",file);
-
-                $.ajax({
-                    url: '<?=site_url('/workflow-requests/upload-sign') ?>',
-                    type: 'post',
-                    data: formdata,
-                    contentType: false,
-                    processData: false,
-                    
-                    success: function(php_script_response){
-                        console.log(php_script_response);
-                
-                
-                    }
-                });
-            })
+        
 
     
     }
 
-   async function urltoFile(url, filename, mimeType){
-        mimeType = mimeType || (url.match(/^data:([^;]+);/)||'')[1];
-        return (fetch(url)
-                .then(function(res){return res.arrayBuffer();})
-                .then(function(buf){return new File([buf], filename, {type:mimeType});})
-        );
-    }
+
 
     async function post(pdfBytes, url){
 
@@ -358,7 +595,7 @@
         const { width, height } = firstPage.getSize()
 
         // Draw a string of text diagonally across the first page
-        firstPage.drawText('This text was added with JavaScript!', {
+        firstPage.drawText(note, {
             x: 5,
             y: height / 2 + 300,
             size: 50,
