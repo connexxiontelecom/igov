@@ -4,18 +4,17 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class UserModel extends Model
+class WorkflowRequestDocument extends Model
 {
 	protected $DBGroup              = 'default';
-	protected $table                = 'users';
-	protected $primaryKey           = 'user_id';
+	protected $table                = 'workflow_documents';
+	protected $primaryKey           = 'id';
 	protected $useAutoIncrement     = true;
 	protected $insertID             = 0;
 	protected $returnType           = 'array';
 	protected $useSoftDeletes       = false;
 	protected $protectFields        = true;
-	protected $allowedFields        = ['user_id', 'user_name', 'user_password', 'user_username', 'user_email',  'user_phone', 'user_employee_id',
-		'user_status', 'user_type'];
+	protected $allowedFields        = ['wd_doc', 'wd_employee_id', 'wd_date'];
 
 	// Dates
 	protected $useTimestamps        = false;
@@ -32,7 +31,7 @@ class UserModel extends Model
 
 	// Callbacks
 	protected $allowCallbacks       = true;
-	protected $beforeInsert         = ["beforeInsert"];
+	protected $beforeInsert         = [];
 	protected $afterInsert          = [];
 	protected $beforeUpdate         = [];
 	protected $afterUpdate          = [];
@@ -40,29 +39,4 @@ class UserModel extends Model
 	protected $afterFind            = [];
 	protected $beforeDelete         = [];
 	protected $afterDelete          = [];
-	
-
-	protected function beforeInsert(array $data)
-	{
-		$data = $this->passwordHash($data);
-		return $data;
-	}
-	
-	protected function passwordHash(array $data)
-	{
-		if (isset($data['data']['user_password'])) :
-			$data['data']['user_password'] = password_hash($data['data']['user_password'], PASSWORD_DEFAULT);
-		endif;
-		
-		return $data;
-	}
-
-	public function getAllUsers(){
-	    return UserModel::findAll();
-    }
-
-
-
-
-
 }

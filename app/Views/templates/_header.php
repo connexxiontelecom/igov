@@ -41,6 +41,11 @@
   <link href="/assets/libs/quill/quill.core.css" rel="stylesheet" type="text/css" />
   <link href="/assets/libs/quill/quill.bubble.css" rel="stylesheet" type="text/css" />
   <link href="/assets/libs/quill/quill.snow.css" rel="stylesheet" type="text/css" />
+	<link href="/assets/libs/flatpickr/flatpickr.min.css" rel="stylesheet" type="text/css" />
+	<link href="/assets/libs/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css" rel="stylesheet" type="text/css" />
+	<link href="/assets/libs/clockpicker/bootstrap-clockpicker.min.css" rel="stylesheet" type="text/css" />
+	<link href="/assets/libs/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
+	<link href="/assets/libs/clockpicker/bootstrap-clockpicker.min.css" rel="stylesheet" type="text/css" />
 	<?=$this->renderSection('extra-styles') ?>
 </head>
 

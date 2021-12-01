@@ -13,6 +13,7 @@ use App\Models\WorkflowRequest;
 use App\Models\WorkflowRequestAttachment;
 use App\Models\WorkflowResponsiblePerson;
 use App\Models\WorkflowType;
+use App\Models\WorkflowRequestDocument;
 
 class WorkflowController extends BaseController
 {
@@ -33,6 +34,7 @@ class WorkflowController extends BaseController
         $this->employee = new Employee();
         $this->workflowresponsibleperson = new WorkflowResponsiblePerson();
         $this->workflowconversation = new WorkflowConversation();
+        $this->wd = new WorkflowRequestDocument();
     }
 
 	public function settings()
@@ -129,12 +131,14 @@ class WorkflowController extends BaseController
             helper(['form', 'url']);
             $department = $this->request->getPost('department');
             $employee = $this->request->getPost('employee');
+            $to = $this->request->getPost('to');
             $type = $this->request->getPost('workflow_type');
             $data = [
                 'w_flow_ex_added_by' => $this->session->user_id,
                 'w_flow_ex_employee_id'=>$employee,
                 'w_flow_ex_department_id'=>$department,
-                'w_flow_ex_type_id'=>$type
+                'w_flow_ex_type_id'=>$type,
+                'w_flow_ex_to_id'=>$to
             ];
             $this->workflowexceptionprocessor->save($data);
             return redirect()->back()->with("success", "<strong>Success!</strong> Workflow processor set.");
@@ -216,20 +220,24 @@ class WorkflowController extends BaseController
                 $user_employee_id = $this->session->user_employee_id;
                 $employee = $this->employee->getEmployeeByUserEmployeeId($user_employee_id);
                 $department = $employee['employee_department_id'];
-                #Exception processors
-                $exception_list = $this->workflowexceptionprocessor->checkExceptionList($user_employee_id, $workflow_type);
-                #Normal
-                $normal_list = $this->workflowprocessor->checkNormalList($user_employee_id, $workflow_type, $department);
-                if(!empty($exception_list)){
-                    $request_id = $this->postRequest();
-                    $this->publishResponsiblePersons($exception_list['w_flow_ex_to_id'], $request_id);
-                    return redirect()->back()->with("success", "<strong>Success!</strong> Your request was submitted successfully.");
-                }elseif(!empty($normal_list)){
-                    $request_id = $this->postRequest();
-                    $this->publishResponsiblePersons($exception_list['w_flow_ex_to_id'], $request_id);
-                    return redirect()->back()->with("success", "<strong>Success!</strong> Your request was submitted successfully.");
+                if(!empty($department)){
+                    #Exception processors
+                    $exception_list = $this->workflowexceptionprocessor->checkExceptionList($user_employee_id, $workflow_type);
+                    #Normal
+                    $normal_list = $this->workflowprocessor->checkNormalList($workflow_type, $department);
+                    if(!empty($exception_list)){
+                        $request_id = $this->postRequest();
+                        $this->publishResponsiblePersons($exception_list['w_flow_ex_to_id'], $request_id);
+                        return redirect()->back()->with("success", "<strong>Success!</strong> Your request was submitted successfully.");
+                    }elseif(!empty($normal_list)){
+                        $request_id = $this->postRequest();
+                        $this->publishResponsiblePersons($normal_list['w_flow_employee_id'], $request_id);
+                        return redirect()->back()->with("success", "<strong>Success!</strong> Your request was submitted successfully.");
+                    }else{
+                        return redirect()->back()->with("error", "<strong>Whoops!</strong> Something went wrong. Ensure workflow setup is properly done for this request.");
+                    }
                 }else{
-                    return redirect()->back()->with("error", "<strong>Whoops!</strong> Something went wrong.");
+                    return redirect()->back()->with("error", "<strong>Whoops!</strong> You've not been assigned to a department. Kindly do that.");
                 }
 
                 /*$data = [
@@ -323,6 +331,11 @@ class WorkflowController extends BaseController
                 'firstTime'=>$this->session->firstTime,
                 'username'=>$this->session->username,
             ];
+	
+	        $user_employee_id = $this->session->user_employee_id;
+	        $employee = $this->employee->getEmployeeByUserEmployeeId($user_employee_id);
+	        $data['employee_signature'] = $employee['employee_signature'];
+	        $data['employee_name'] = $employee['employee_f_name']." ".$employee['employee_l_name'];
             return view('pages/workflow/view-workflow-request', $data);
         }else{
             return redirect()->back()->with("error", "<strong>Whoops!</strong> No record found.");
@@ -451,5 +464,29 @@ class WorkflowController extends BaseController
             }
         }
     }
+    
+    public function uploadSign(){
+		
+	    $file = $this->request->getFile('file');
+	    $file_name = $file->getName();
+	    $file_path = 'uploads/posts/'.$file_name;
+	    unlink($file_path);
+	    $file->move('uploads/posts/', $file_name);
+	
+	    $user_employee_id = $this->session->user_employee_id;
+	    
+	    $wd_array = array(
+	    	'wd_doc' => $file_name,
+		    'wd_employee_id' => $user_employee_id,
+		    'wd_date' => date('Y-m-d H:i:s')
+		    );
+	    
+	    $this->wd->save($wd_array);
+	    
+	    echo $file_name;
+
+	    } // uploadFileFromBlobString
+	
+//    }
 
 }

@@ -48,7 +48,10 @@ class WorkflowRequest extends Model
         $builder = $this->db->table('workflow_requests as wr');
         $builder->join('users as u', 'u.user_id = wr.requested_by');
         $builder->join('workflow_types wt', 'wt.workflow_type_id = wr.requested_type_id');
+        $builder->select("wr.created_at as c_at, wr.amount, wr.request_title, wr.request_description, wt.workflow_type_name, 
+        wr.workflow_request_id");
         $builder->where('wr.requested_by = '.$user_id);
+        $builder->orderBy('wr.workflow_request_id', 'DESC');
         $result = $builder->get()->getResultArray();
         return $result;
     }
