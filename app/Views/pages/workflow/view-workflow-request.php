@@ -1,3 +1,9 @@
+<?php
+use App\Models\WorkflowRequestDocument;
+
+$this->wd = new WorkflowRequestDocument();
+?>
+
 <?= $this->extend('layouts/master'); ?>
 
 <?= $this->section('content'); ?>
@@ -212,7 +218,9 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title mb-3">Attachments</h5>
-                    <?php foreach($workflow_attachments as $attachment): ?>
+                    <?php $k = 1; foreach($workflow_attachments as $attachment):
+						$count_signs = count($this->wd->where('wd_doc', $attachment['attachment'])->findAll());
+						?>
                     <div class="card mb-1 shadow-none border">
                         <div class="p-2">
                             <div class="row align-items-center">
@@ -235,11 +243,11 @@
 									
 									
 	
-									<button type="button" class="btn btn-link btn-lg text-muted" data-toggle="modal" data-target="#standard-modal"><i class="dripicons-pencil"> </i></button>
+									<button type="button" class="btn btn-link btn-lg text-muted" data-toggle="modal" data-target="#standard-modal<?=$k; ?>"><i class="dripicons-pencil"> </i></button>
 	
 	
 									<!-- Standard modal content -->
-									<div id="standard-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="standard-modalLabel" aria-hidden="true">
+									<div id="standard-modal<?=$k; ?>" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="standard-modalLabel" aria-hidden="true">
 										<div class="modal-dialog">
 											<div class="modal-content">
 												<div class="modal-header">
@@ -247,39 +255,52 @@
 													<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 												</div>
 												<div class="modal-body">
-													<h6>Text in a modal</h6>
+													
+<!--													<div class="form-group mb-3">-->
+<!--														<label>Colour:</label>-->
+<!--														<div id="component-colorpicker" class="input-group" title="Using format option">-->
+<!--															<input id="pen-color" type="text" class="form-control input-lg" value="#305AA2"/>-->
+<!--															<span class="input-group-append">-->
+<!--                                                <span class="input-group-text colorpicker-input-addon"><i></i></span>-->
+<!--                                            </span>-->
+<!--														</div>-->
+<!--													</div>-->
+													
 													<div class="form-group mb-3">
-														<label>Colour:</label>
-														<div id="component-colorpicker" class="input-group" title="Using format option">
-															<input id="pen-color" type="text" class="form-control input-lg" value="#305AA2"/>
-															<span class="input-group-append">
-                                                <span class="input-group-text colorpicker-input-addon"><i></i></span>
-                                            </span>
-														</div>
+														<label for="example-select">Color</label>
+														<select class="form-control" id="pen-color">
+															<option value="rgb(0,0,0)"> Black </option>
+															<option value="rgb(255,0,0)">Red</option>
+															<option value="rgb(0,0,255)"> Blue </option>
+															<option value="rgb(0,128,0)"> Green </option>
+															
+														
+														</select>
 													</div>
 													<hr>
 													<input type="hidden" value="<?=$employee_name ?>" id="employee-name">
+													<input type="hidden" value="<?=$count_signs ?>" id="count-signs">
 													<div class="form-group mb-3">
 														<label for="simpleinput">Comment</label>
 														<textarea  class="form-control" id="comment" rows="5"></textarea>
 													</div>
 													
-													<div class="form-group mb-3">
-														<label for="example-select">Position</label>
-														<select class="form-control" id="position">
-															<option value="0">Select Position</option>
-															<option value="1">Top Left</option>
-															<option value="2"> Top Center </option>
-															<option value="3"> Top Right </option>
-															<option value="4"> Center Left </option>
-															<option value="5"> Center Center </option>
-															<option value="6"> Center Right </option>
-															<option value="7">Bottom Left</option>
-															<option value="8"> Bottom Center </option>
-															<option value="9"> Bottom Right </option>
-															
-														</select>
-													</div>
+<!--													<div class="form-group mb-3">-->
+<!--														<label for="example-select">Position</label>-->
+<!--														<select class="form-control" id="position">-->
+<!--															<option value="0">Select Position</option>-->
+<!--															<option value="1">Top Left</option>-->
+<!--															<option value="2"> Top Center </option>-->
+<!--															<option value="3"> Top Right </option>-->
+<!--															<option value="4"> Center Left </option>-->
+<!--															<option value="5"> Center Center </option>-->
+<!--															<option value="6"> Center Right </option>-->
+<!--															<option value="7">Bottom Left</option>-->
+<!--															<option value="8"> Bottom Center </option>-->
+<!--															<option value="9"> Bottom Right </option>-->
+<!--															-->
+<!--														</select>-->
+<!--													</div>-->
 												
 																		</div>
 												<div class="modal-footer">
@@ -294,7 +315,7 @@
                             </div>
                         </div>
                     </div>
-                    <?php endforeach; ?>
+                    <?php $k++; endforeach; ?>
 
                 </div>
             </div>
@@ -316,8 +337,10 @@
 
 		let color =$('#pen-color').val();
         let comment = $('#comment').val();
-        let position = $('#position').val();
+       // let position = $('#position').val();
         let name = $('#employee-name').val();
+        let count_signs = parseInt($('#count-signs').val());
+        count_signs = count_signs + 1;
         let note = `${comment} - ${name}`;
         color = color.replace('rgb(', '' )
         color = color.replace(')', '' )
@@ -327,204 +350,238 @@
         color[2] = color[2]/255;
         console.log(color);
 
-        if(position == '0'){
-            alert('Please Select a Position')
-		} else{
-            const jpgUrls = sign;
-            const jpgImageBytess = await fetch(jpgUrls).then((res) => res.arrayBuffer())
+        const jpgUrls = sign;
+        const jpgImageBytess = await fetch(jpgUrls).then((res) => res.arrayBuffer())
 
-            // Create a new PDFDocument
-            const existingPdfBytes = await fetch(url).then(res => res.arrayBuffer())
+        // Create a new PDFDocument
+        const existingPdfBytes = await fetch(url).then(res => res.arrayBuffer())
 
-            // Load a PDFDocument from the existing PDF bytes
-            const pdfDoc = await PDFDocument.load(existingPdfBytes)
+        // Load a PDFDocument from the existing PDF bytes
+        const pdfDoc = await PDFDocument.load(existingPdfBytes)
 
-            const jpgImages = await pdfDoc.embedJpg(jpgImageBytess)
+        const jpgImages = await pdfDoc.embedJpg(jpgImageBytess)
 
 
-            const pages = pdfDoc.getPages()
-            const firstPage = pages[0]
+        const pages = pdfDoc.getPages()
+        const firstPage = pages[0]
 
-            const jpgDimss = jpgImages.scale(0.5)
-            const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica)
-            switch (position) {
-                case '1':
-					console.log('top left');
-                    firstPage.drawImage(jpgImages, {
-                        x: firstPage.getWidth() - 500,
-                        y: firstPage.getHeight()/10 + 620,
-                        width: jpgDimss.width,
-                        height: jpgDimss.height,
-                    })
-
-                    firstPage.drawText(note, {
-                        x: firstPage.getWidth() - 500,
-                        y: firstPage.getHeight()/10 + 600,
-                        size: 12,
-                        font: helveticaFont,
-                        color: rgb(color[0], color[1], color[2]),
-                    })
-                    break;
-                case '2':
-                    firstPage.drawImage(jpgImages, {
-                        x: firstPage.getWidth() - 300,
-                        y: firstPage.getHeight()/10 + 620,
-                        width: jpgDimss.width,
-                        height: jpgDimss.height,
-                    })
-
-                    firstPage.drawText(note, {
-                        x: firstPage.getWidth() - 300,
-                        y: firstPage.getHeight()/10 + 600,
-                        size: 12,
-                        font: helveticaFont,
-                        color: rgb(color[0], color[1], color[2]),
-                    })
-                    break;
-                case '3':
-                    firstPage.drawImage(jpgImages, {
-                        x: firstPage.getWidth() - 150,
-                        y: firstPage.getHeight()/10 + 620,
-                        width: jpgDimss.width,
-                        height: jpgDimss.height,
-                    })
-
-                    firstPage.drawText(note, {
-                        x: firstPage.getWidth() - 150,
-                        y: firstPage.getHeight()/10 + 600,
-                        size: 12,
-                        font: helveticaFont,
-                        color: rgb(color[0], color[1], color[2]),
-                    })
-                    break;
-                case '4':
-                    firstPage.drawImage(jpgImages, {
-                        x: firstPage.getWidth() - 500,
-                        y: firstPage.getHeight()/10 + 500,
-                        width: jpgDimss.width,
-                        height: jpgDimss.height,
-                    })
-
-                    firstPage.drawText(note, {
-                        x: firstPage.getWidth() - 500,
-                        y: firstPage.getHeight()/10 + 450,
-                        size: 12,
-                        font: helveticaFont,
-                        color: rgb(color[0], color[1], color[2]),
-                    })
-                    break;
-                case '5':
-                    firstPage.drawImage(jpgImages, {
-                        x: firstPage.getWidth() - 300,
-                        y: firstPage.getHeight()/10 + 500,
-                        width: jpgDimss.width,
-                        height: jpgDimss.height,
-                    })
-
-                    firstPage.drawText(note, {
-                        x: firstPage.getWidth() - 300,
-                        y: firstPage.getHeight()/10 + 450,
-                        size: 12,
-                        font: helveticaFont,
-                        color: rgb(color[0], color[1], color[2]),
-                    })
-                    break;
-                case '6':
-                    firstPage.drawImage(jpgImages, {
-                        x: firstPage.getWidth() - 150,
-                        y: firstPage.getHeight()/10 + 500,
-                        width: jpgDimss.width,
-                        height: jpgDimss.height,
-                    })
-
-                    firstPage.drawText(note, {
-                        x: firstPage.getWidth() - 150,
-                        y: firstPage.getHeight()/10 + 450,
-                        size: 12,
-                        font: helveticaFont,
-                        color: rgb(color[0], color[1], color[2]),
-                    })
-                    break;
-                case '7':
-
-                    firstPage.drawImage(jpgImages, {
-                        x: firstPage.getWidth() - 500,
-                        y: firstPage.getHeight()/10 + 500,
-                        width: jpgDimss.width,
-                        height: jpgDimss.height,
-                    })
-
-                    firstPage.drawText(note, {
-                        x: firstPage.getWidth() - 500,
-                        y: firstPage.getHeight()/10 + 450,
-                        size: 12,
-                        font: helveticaFont,
-                        color: rgb(color[0], color[1], color[2]),
-                    })
-
-                    break;
-                case '8':
-                    firstPage.drawImage(jpgImages, {
-                        x: firstPage.getWidth() - 300,
-                        y: firstPage.getHeight()/10 + 80,
-                        width: jpgDimss.width,
-                        height: jpgDimss.height,
-                    })
-
-                    firstPage.drawText(note, {
-                        x: firstPage.getWidth() - 300,
-                        y: firstPage.getHeight()/10 + 70,
-                        size: 12,
-                        font: helveticaFont,
-                        color: rgb(color[0], color[1], color[2]),
-                    })
-
-                    break;
-
-                case '9':
-                    firstPage.drawImage(jpgImages, {
-                        x: firstPage.getWidth() - 150,
-                        y: firstPage.getHeight()/10 + 80,
-                        width: jpgDimss.width,
-                        height: jpgDimss.height,
-                    })
-
-                    firstPage.drawText(note, {
-                        x: firstPage.getWidth() - 150,
-                        y: firstPage.getHeight()/10 + 70,
-                        size: 12,
-                        font: helveticaFont,
-                        color: rgb(color[0], color[1], color[2]),
-                    })
-                    break;
-            }
-
-            //const pdfBytes = await pdfDoc.save()
-            const pdfBytes = await pdfDoc.saveAsBase64({ dataUri: true })
-            let fileName = /[^/]*$/.exec(url)[0];
-
-            urltoFile(pdfBytes, fileName)
-                .then(function(file){
-                    console.log(file);
-                    let formdata = new FormData();
-                    formdata.append("file",file);
-
-                    $.ajax({
-                        url: '<?=site_url('/workflow-requests/upload-sign') ?>',
-                        type: 'post',
-                        data: formdata,
-                        contentType: false,
-                        processData: false,
-
-                        success: function(php_script_response){
-                            console.log(php_script_response);
-                            alert('Document SIgned');
-
-
-                        }
-                    });
-                })
+        const jpgDimss = jpgImages.scale(0.5)
+        const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica)
+			let jpgDraw;
+        	let drawText;
+		if(count_signs > 1){
+		   jpgDraw = 100 * count_signs;
+		   drawText = 97 * count_signs;
 		}
+		else{
+		    jpgDraw = 80 * count_signs;
+            drawText = 70 * count_signs;
+		}
+
+        firstPage.drawImage(jpgImages, {
+            x: firstPage.getWidth() - 300,
+            y: firstPage.getHeight()/10 + (jpgDraw),
+            width: jpgDimss.width,
+            height: jpgDimss.height,
+        })
+
+        firstPage.drawText(note, {
+            x: firstPage.getWidth() - 300,
+            y: firstPage.getHeight()/10 + (drawText),
+            size: 7,
+            font: helveticaFont,
+            color: rgb(color[0], color[1], color[2]),
+        })
+
+
+
+        // switch (position) {
+        //     case '1':
+        // 		console.log('top left');
+        //         firstPage.drawImage(jpgImages, {
+        //             x: firstPage.getWidth() - 500,
+        //             y: firstPage.getHeight()/10 + 620,
+        //             width: jpgDimss.width,
+        //             height: jpgDimss.height,
+        //         })
+        //
+        //         firstPage.drawText(note, {
+        //             x: firstPage.getWidth() - 500,
+        //             y: firstPage.getHeight()/10 + 600,
+        //             size: 12,
+        //             font: helveticaFont,
+        //             color: rgb(color[0], color[1], color[2]),
+        //         })
+        //         break;
+        //     case '2':
+        //         firstPage.drawImage(jpgImages, {
+        //             x: firstPage.getWidth() - 300,
+        //             y: firstPage.getHeight()/10 + 620,
+        //             width: jpgDimss.width,
+        //             height: jpgDimss.height,
+        //         })
+        //
+        //         firstPage.drawText(note, {
+        //             x: firstPage.getWidth() - 300,
+        //             y: firstPage.getHeight()/10 + 600,
+        //             size: 12,
+        //             font: helveticaFont,
+        //             color: rgb(color[0], color[1], color[2]),
+        //         })
+        //         break;
+        //     case '3':
+        //         firstPage.drawImage(jpgImages, {
+        //             x: firstPage.getWidth() - 150,
+        //             y: firstPage.getHeight()/10 + 620,
+        //             width: jpgDimss.width,
+        //             height: jpgDimss.height,
+        //         })
+        //
+        //         firstPage.drawText(note, {
+        //             x: firstPage.getWidth() - 150,
+        //             y: firstPage.getHeight()/10 + 600,
+        //             size: 12,
+        //             font: helveticaFont,
+        //             color: rgb(color[0], color[1], color[2]),
+        //         })
+        //         break;
+        //     case '4':
+        //         firstPage.drawImage(jpgImages, {
+        //             x: firstPage.getWidth() - 500,
+        //             y: firstPage.getHeight()/10 + 500,
+        //             width: jpgDimss.width,
+        //             height: jpgDimss.height,
+        //         })
+        //
+        //         firstPage.drawText(note, {
+        //             x: firstPage.getWidth() - 500,
+        //             y: firstPage.getHeight()/10 + 450,
+        //             size: 12,
+        //             font: helveticaFont,
+        //             color: rgb(color[0], color[1], color[2]),
+        //         })
+        //         break;
+        //     case '5':
+        //         firstPage.drawImage(jpgImages, {
+        //             x: firstPage.getWidth() - 300,
+        //             y: firstPage.getHeight()/10 + 500,
+        //             width: jpgDimss.width,
+        //             height: jpgDimss.height,
+        //         })
+        //
+        //         firstPage.drawText(note, {
+        //             x: firstPage.getWidth() - 300,
+        //             y: firstPage.getHeight()/10 + 450,
+        //             size: 12,
+        //             font: helveticaFont,
+        //             color: rgb(color[0], color[1], color[2]),
+        //         })
+        //         break;
+        //     case '6':
+        //         firstPage.drawImage(jpgImages, {
+        //             x: firstPage.getWidth() - 150,
+        //             y: firstPage.getHeight()/10 + 500,
+        //             width: jpgDimss.width,
+        //             height: jpgDimss.height,
+        //         })
+        //
+        //         firstPage.drawText(note, {
+        //             x: firstPage.getWidth() - 150,
+        //             y: firstPage.getHeight()/10 + 450,
+        //             size: 12,
+        //             font: helveticaFont,
+        //             color: rgb(color[0], color[1], color[2]),
+        //         })
+        //         break;
+        //     case '7':
+        //
+        //         firstPage.drawImage(jpgImages, {
+        //             x: firstPage.getWidth() - 500,
+        //             y: firstPage.getHeight()/10 + 500,
+        //             width: jpgDimss.width,
+        //             height: jpgDimss.height,
+        //         })
+        //
+        //         firstPage.drawText(note, {
+        //             x: firstPage.getWidth() - 500,
+        //             y: firstPage.getHeight()/10 + 450,
+        //             size: 12,
+        //             font: helveticaFont,
+        //             color: rgb(color[0], color[1], color[2]),
+        //         })
+        //
+        //         break;
+        //     case '8':
+        //         firstPage.drawImage(jpgImages, {
+        //             x: firstPage.getWidth() - 300,
+        //             y: firstPage.getHeight()/10 + 80,
+        //             width: jpgDimss.width,
+        //             height: jpgDimss.height,
+        //         })
+        //
+        //         firstPage.drawText(note, {
+        //             x: firstPage.getWidth() - 300,
+        //             y: firstPage.getHeight()/10 + 70,
+        //             size: 12,
+        //             font: helveticaFont,
+        //             color: rgb(color[0], color[1], color[2]),
+        //         })
+        //
+        //         break;
+        //
+        //     case '9':
+        //         firstPage.drawImage(jpgImages, {
+        //             x: firstPage.getWidth() - 150,
+        //             y: firstPage.getHeight()/10 + 80,
+        //             width: jpgDimss.width,
+        //             height: jpgDimss.height,
+        //         })
+        //
+        //         firstPage.drawText(note, {
+        //             x: firstPage.getWidth() - 150,
+        //             y: firstPage.getHeight()/10 + 70,
+        //             size: 12,
+        //             font: helveticaFont,
+        //             color: rgb(color[0], color[1], color[2]),
+        //         })
+        //         break;
+        // }
+
+        //const pdfBytes = await pdfDoc.save()
+        const pdfBytes = await pdfDoc.saveAsBase64({ dataUri: true })
+        let fileName = /[^/]*$/.exec(url)[0];
+
+        urltoFile(pdfBytes, fileName)
+            .then(function(file){
+                console.log(file);
+                let formdata = new FormData();
+                formdata.append("file",file);
+
+                $.ajax({
+                    url: '<?=site_url('/workflow-requests/upload-sign') ?>',
+                    type: 'post',
+                    data: formdata,
+                    contentType: false,
+                    processData: false,
+
+                    success: function(php_script_response){
+                        console.log(php_script_response);
+                        alert('Document SIgned');
+
+
+                    }
+                });
+            })
+
+        // if(0){
+        //     alert('Please Select a Position')
+		// }
+        //
+        //
+        //
+        // else{
+        //
+		// }
 
     
     

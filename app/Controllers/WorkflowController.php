@@ -13,6 +13,7 @@ use App\Models\WorkflowRequest;
 use App\Models\WorkflowRequestAttachment;
 use App\Models\WorkflowResponsiblePerson;
 use App\Models\WorkflowType;
+use App\Models\WorkflowRequestDocument;
 
 class WorkflowController extends BaseController
 {
@@ -33,6 +34,7 @@ class WorkflowController extends BaseController
         $this->employee = new Employee();
         $this->workflowresponsibleperson = new WorkflowResponsiblePerson();
         $this->workflowconversation = new WorkflowConversation();
+        $this->wd = new WorkflowRequestDocument();
     }
 
 	public function settings()
@@ -470,6 +472,17 @@ class WorkflowController extends BaseController
 	    $file_path = 'uploads/posts/'.$file_name;
 	    unlink($file_path);
 	    $file->move('uploads/posts/', $file_name);
+	
+	    $user_employee_id = $this->session->user_employee_id;
+	    
+	    $wd_array = array(
+	    	'wd_doc' => $file_name,
+		    'wd_employee_id' => $user_employee_id,
+		    'wd_date' => date('Y-m-d H:i:s')
+		    );
+	    
+	    $this->wd->save($wd_array);
+	    
 	    echo $file_name;
 
 	    } // uploadFileFromBlobString
